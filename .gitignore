@@ -37,3 +37,7 @@ pnpm-debug.log*
 .idea/
 *.swp
 *.swo
+
+# Playwright MCP artifacts (dev-only screenshots, console logs, snapshots)
+.playwright-mcp/
+phase*.png
