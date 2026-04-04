@@ -11,14 +11,17 @@ Run locally:
 
 from __future__ import annotations
 
+import json
 from contextlib import asynccontextmanager
 from datetime import datetime, timedelta, timezone
 from typing import Literal
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
+from agent import run_agent_stream
 from database import get_connection, row_to_dict, seed_database
 
 # ---------------------------------------------------------------------------
@@ -68,6 +71,16 @@ class TrendPoint(BaseModel):
     warning: int
 
     model_config = {"populate_by_name": True}
+
+
+class ChatMessage(BaseModel):
+    role: Literal["user", "assistant", "system"]
+    content: str
+
+
+class ChatRequest(BaseModel):
+    messages: list[ChatMessage]
+    session_id: str | None = None
 
 
 # ---------------------------------------------------------------------------
@@ -310,3 +323,36 @@ def get_trends() -> list[TrendPoint]:
             )
         )
     return trend
+
+
+# ---------------------------------------------------------------------------
+# /api/chat — streaming SSE endpoint for the LangGraph agent
+# ---------------------------------------------------------------------------
+
+
+@app.post("/api/chat")
+async def chat(req: ChatRequest):
+    """Stream agent events as Server-Sent Events.
+
+    Each event is emitted as `data: {json}\\n\\n`. Event types:
+      thinking | tool_call | tool_result | text | table | chart | test_cases | done | error
+
+    Mode switches on OPENAI_API_KEY: real LangGraph ReAct agent when set,
+    keyword-dispatched mock agent otherwise. Both modes emit the same
+    event schema so the frontend renders identically.
+    """
+    messages = [m.model_dump() for m in req.messages]
+
+    async def event_stream():
+        async for event in run_agent_stream(messages):
+            yield f"data: {json.dumps(event)}\n\n"
+
+    return StreamingResponse(
+        event_stream(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )
