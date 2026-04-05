@@ -1,0 +1,117 @@
+'use client';
+
+import { useState } from 'react';
+import {
+  BarChart3,
+  ChevronDown,
+  Database,
+  FileCode2,
+  Sigma,
+  type LucideIcon,
+} from 'lucide-react';
+
+import { cn } from '@/lib/utils';
+import type { ToolCall, ToolName } from '@/lib/types';
+
+interface ToolCallCardProps {
+  toolCall: ToolCall;
+}
+
+const TOOL_ICONS: Record<ToolName, LucideIcon> = {
+  query_tests: Database,
+  generate_chart_data: BarChart3,
+  generate_test_cases: FileCode2,
+  summarize_results: Sigma,
+};
+
+const TOOL_LABELS: Record<ToolName, string> = {
+  query_tests: 'query_tests',
+  generate_chart_data: 'generate_chart_data',
+  generate_test_cases: 'generate_test_cases',
+  summarize_results: 'summarize_results',
+};
+
+/**
+ * Collapsible card showing a single tool invocation. Closed view: icon +
+ * name + status dot. Expanded view: pretty-printed input args + result
+ * preview. Animates in on mount via animate-fade-in.
+ */
+export function ToolCallCard({ toolCall }: ToolCallCardProps) {
+  const [expanded, setExpanded] = useState(false);
+  const Icon = TOOL_ICONS[toolCall.name];
+
+  return (
+    <div className="overflow-hidden rounded-lg border border-white/5 bg-surface-elevated animate-fade-in">
+      <button
+        type="button"
+        onClick={() => setExpanded((v) => !v)}
+        aria-expanded={expanded}
+        className={cn(
+          'flex w-full items-center gap-2 px-3 py-2 text-left transition-colors',
+          'hover:bg-white/[0.02]',
+          'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-agent-thinking/40',
+        )}
+      >
+        <Icon
+          className="h-3.5 w-3.5 text-agent-thinking"
+          strokeWidth={2}
+          aria-hidden="true"
+        />
+        <span className="font-mono text-[11px] text-ink-on-dark">
+          {TOOL_LABELS[toolCall.name]}
+        </span>
+        <StatusDot status={toolCall.status} />
+        <ChevronDown
+          className={cn(
+            'ml-auto h-3 w-3 text-ink-muted transition-transform',
+            expanded && 'rotate-180',
+          )}
+          strokeWidth={2}
+          aria-hidden="true"
+        />
+      </button>
+      {expanded && (
+        <div className="space-y-2 border-t border-white/5 px-3 py-2">
+          <div>
+            <div className="mb-1 font-mono text-[10px] uppercase tracking-wider text-ink-muted">
+              Input
+            </div>
+            <pre className="whitespace-pre-wrap break-words font-mono text-[10px] leading-relaxed text-ink-on-dark/80">
+              {JSON.stringify(toolCall.args, null, 2)}
+            </pre>
+          </div>
+          {toolCall.preview && (
+            <div>
+              <div className="mb-1 font-mono text-[10px] uppercase tracking-wider text-ink-muted">
+                Result
+              </div>
+              <div className="font-mono text-[10px] leading-relaxed text-ink-on-dark/80">
+                {toolCall.preview}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function StatusDot({ status }: { status: ToolCall['status'] }) {
+  const label = {
+    running: 'Running',
+    ok: 'Completed',
+    error: 'Failed',
+  }[status];
+  return (
+    <span
+      className={cn(
+        'h-1.5 w-1.5 rounded-full',
+        status === 'running' && 'bg-agent-thinking animate-agent-pulse',
+        status === 'ok' && 'bg-agent-success',
+        status === 'error' && 'bg-status-fail',
+      )}
+      role="status"
+      aria-label={label}
+    />
+  );
+}
