@@ -472,7 +472,7 @@ The project is complete when:
 - ✅ **Phase A — Foundation (tokens, deps, IndustrialIcon)** — COMPLETE
 - ✅ **Phase B — Primitives (MotionPrimitives, ConfidenceMeter, AnomalyAlertBadge, WhyPopover, EngineeringMetadata)** — COMPLETE
 - ✅ **Phase C — Data layer (operations, simulations, build-trace, stores)** — COMPLETE
-- ⬜ **Phase D — Composite components (ScopingPresets, ParameterSliderPanel, DynamicTaskCard, DecisionTrace, ManualOverrideControl, SimulatedRibbon)** — TODO
+- ✅ **Phase D — Composite components (ScopingPresets, ParameterSliderPanel, DynamicTaskCard, DecisionTrace, ManualOverrideControl, SimulatedRibbon)** — COMPLETE
 - ⬜ **Phase E — Visual refresh of existing components** — TODO
 - ⬜ **Phase F — Page integration (Dashboard, Results, Test Generator, Chat)** — TODO
 - ⬜ **Phase G — Test + polish (Playwright, a11y, reduced-motion, bundle, screenshots)** — TODO

@@ -4,6 +4,8 @@ import {
   BarChart3,
   Bookmark,
   CheckCircle2,
+  ChevronDown,
+  ChevronRight,
   Database,
   FileCode2,
   FileJson,
@@ -68,6 +70,9 @@ const ICONS = {
   TestCase: FileCode2,
   Csv: FileSpreadsheet,
   Json: FileJson,
+  // Disclosure / affordances
+  ChevronDown: ChevronDown,
+  ChevronRight: ChevronRight,
 } as const satisfies Record<string, LucideIcon>;
 
 export type IndustrialIconName = keyof typeof ICONS;
