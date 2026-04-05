@@ -12,9 +12,31 @@ import {
 
 import { cn } from '@/lib/utils';
 import type { ToolCall, ToolName } from '@/lib/types';
+import {
+  EngineeringMetadata,
+  type MetadataItem,
+} from '@/components/industrial/engineering-metadata';
 
 interface ToolCallCardProps {
   toolCall: ToolCall;
+}
+
+/** Extract lightweight metadata from the tool call args/preview. */
+function deriveToolMetadata(toolCall: ToolCall): MetadataItem[] {
+  const items: MetadataItem[] = [];
+  const args = toolCall.args ?? {};
+
+  // Surface common numeric args (limit, count, page_size) as metadata.
+  const NUMERIC_KEYS = ['limit', 'count', 'page_size', 'days'] as const;
+  for (const key of NUMERIC_KEYS) {
+    const v = args[key];
+    if (typeof v === 'number' && Number.isFinite(v)) {
+      items.push({ label: key, value: String(v) });
+      if (items.length >= 2) break;
+    }
+  }
+
+  return items;
 }
 
 const TOOL_ICONS: Record<ToolName, LucideIcon> = {
@@ -39,6 +61,7 @@ const TOOL_LABELS: Record<ToolName, string> = {
 export function ToolCallCard({ toolCall }: ToolCallCardProps) {
   const [expanded, setExpanded] = useState(false);
   const Icon = TOOL_ICONS[toolCall.name];
+  const metadata = deriveToolMetadata(toolCall);
 
   return (
     <div className="overflow-hidden rounded-lg border border-white/5 bg-surface-elevated animate-fade-in">
@@ -61,9 +84,17 @@ export function ToolCallCard({ toolCall }: ToolCallCardProps) {
           {TOOL_LABELS[toolCall.name]}
         </span>
         <StatusDot status={toolCall.status} />
+        {metadata.length > 0 && (
+          <EngineeringMetadata
+            items={metadata}
+            align="end"
+            className="ml-auto !text-[9px]"
+          />
+        )}
         <ChevronDown
           className={cn(
-            'ml-auto h-3 w-3 text-ink-muted transition-transform',
+            'h-3 w-3 text-ink-muted transition-transform',
+            metadata.length === 0 && 'ml-auto',
             expanded && 'rotate-180',
           )}
           strokeWidth={2}
@@ -76,7 +107,7 @@ export function ToolCallCard({ toolCall }: ToolCallCardProps) {
             <div className="mb-1 font-mono text-[10px] uppercase tracking-wider text-ink-muted">
               Input
             </div>
-            <pre className="whitespace-pre-wrap break-words font-mono text-[10px] leading-relaxed text-ink-on-dark/80">
+            <pre className="whitespace-pre-wrap break-words font-mono text-[10px] leading-snug text-ink-on-dark/80">
               {JSON.stringify(toolCall.args, null, 2)}
             </pre>
           </div>
@@ -85,7 +116,7 @@ export function ToolCallCard({ toolCall }: ToolCallCardProps) {
               <div className="mb-1 font-mono text-[10px] uppercase tracking-wider text-ink-muted">
                 Result
               </div>
-              <div className="font-mono text-[10px] leading-relaxed text-ink-on-dark/80">
+              <div className="font-mono text-[10px] leading-snug text-ink-on-dark/80">
                 {toolCall.preview}
               </div>
             </div>

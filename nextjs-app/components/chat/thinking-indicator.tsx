@@ -28,7 +28,7 @@ export function ThinkingIndicator({ messages, active }: ThinkingIndicatorProps) 
       : 'Thought';
 
   return (
-    <div className="rounded-lg border border-white/5 bg-surface-elevated/60">
+    <div className="rounded-md border border-white/10 bg-surface-elevated/80">
       <button
         type="button"
         onClick={() => setExpanded((v) => !v)}
@@ -62,7 +62,7 @@ export function ThinkingIndicator({ messages, active }: ThinkingIndicatorProps) 
         )}
       </button>
       {expanded && hasMessages && (
-        <ol className="space-y-1 border-t border-white/5 px-3 py-2">
+        <ol className="space-y-0.5 border-t border-white/10 px-3 py-2">
           {messages.map((m, i) => (
             <li
               key={i}

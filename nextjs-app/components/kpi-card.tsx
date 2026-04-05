@@ -4,6 +4,12 @@ import { AlertCircle, ArrowDownRight, ArrowUpRight, type LucideIcon } from 'luci
 import { cn } from '@/lib/utils';
 import { useCountUp } from '@/lib/hooks/use-count-up';
 import { Skeleton } from './skeleton';
+import { InsightPulse } from './industrial/motion-primitives';
+import { AnomalyAlertBadge } from './industrial/anomaly-alert-badge';
+import {
+  EngineeringMetadata,
+  type MetadataItem,
+} from './industrial/engineering-metadata';
 
 type Accent = 'pass' | 'fail' | 'warning' | 'info' | 'magna';
 
@@ -21,6 +27,10 @@ interface KpiCardProps {
   decimals?: number;
   /** Inverts trend coloring for metrics where "down" is good (e.g. FPR). */
   invertTrend?: boolean;
+  /** Optional corner anomaly indicator. */
+  anomaly?: 'critical' | 'anomaly' | 'watch' | null;
+  /** Optional engineering metadata rendered below the trend row. */
+  metadata?: MetadataItem[];
 }
 
 const ACCENT_BORDERS: Record<Accent, string> = {
@@ -42,6 +52,8 @@ export function KpiCard({
   icon: Icon,
   decimals = 0,
   invertTrend = false,
+  anomaly = null,
+  metadata,
 }: KpiCardProps) {
   const animated = useCountUp(value, 800, decimals);
 
@@ -54,12 +66,20 @@ export function KpiCard({
   return (
     <div
       className={cn(
-        'h-[100px] rounded-card bg-surface-card border-l-4 border border-hairline shadow-card',
+        'relative h-[100px] rounded-card bg-surface-card border-l-4 border border-hairline shadow-card',
         'transition-shadow duration-200 hover:shadow-card-hover',
         'flex flex-col justify-between px-5 py-3',
         ACCENT_BORDERS[accentColor],
       )}
     >
+      {anomaly && (
+        <AnomalyAlertBadge
+          severity={anomaly}
+          variant="kpi-corner"
+          tooltip={`${anomaly.toUpperCase()} — ${label}`}
+        />
+      )}
+
       <div className="flex items-start justify-between">
         <span className="text-[11px] font-semibold uppercase tracking-wider text-ink-secondary">
           {label}
@@ -79,18 +99,20 @@ export function KpiCard({
             className="h-5 w-5 text-status-fail"
             aria-label="Metric unavailable"
           />
-          <span className="font-mono text-[28px] font-bold leading-none text-ink-secondary tabular-nums">
+          <span className="font-mono text-[28px] font-bold leading-none tracking-tight text-ink-secondary tabular-nums">
             —
           </span>
         </div>
       ) : (
         <div className="flex items-baseline">
-          <span className="font-mono text-[28px] font-bold leading-none text-ink-primary tabular-nums">
-            {animated.toLocaleString('en-US', {
-              minimumFractionDigits: decimals,
-              maximumFractionDigits: decimals,
-            })}
-          </span>
+          <InsightPulse triggerKey={value}>
+            <span className="font-mono text-[28px] font-bold leading-none tracking-tight text-ink-primary tabular-nums">
+              {animated.toLocaleString('en-US', {
+                minimumFractionDigits: decimals,
+                maximumFractionDigits: decimals,
+              })}
+            </span>
+          </InsightPulse>
           {unit && (
             <span className="ml-1 text-sm font-medium text-ink-secondary">{unit}</span>
           )}
@@ -104,21 +126,28 @@ export function KpiCard({
           Failed to load
         </div>
       ) : typeof trend === 'number' ? (
-        <div
-          className={cn(
-            'inline-flex items-center gap-1 text-[11px] font-medium',
-            trendPositive && 'text-status-pass',
-            trendNegative && 'text-status-fail',
-            !trendPositive && !trendNegative && 'text-ink-secondary',
+        <div className="flex items-center justify-between gap-2">
+          <div
+            className={cn(
+              'inline-flex items-center gap-1 text-[11px] font-medium',
+              trendPositive && 'text-status-pass',
+              trendNegative && 'text-status-fail',
+              !trendPositive && !trendNegative && 'text-ink-secondary',
+            )}
+          >
+            <TrendIcon className="h-3 w-3" aria-hidden />
+            <span className="font-mono tabular-nums">
+              {trend > 0 ? '+' : ''}
+              {trend.toFixed(1)}
+            </span>
+            <span className="text-ink-secondary">vs prior 7d</span>
+          </div>
+          {metadata && metadata.length > 0 && (
+            <EngineeringMetadata items={metadata} align="end" />
           )}
-        >
-          <TrendIcon className="h-3 w-3" aria-hidden />
-          <span className="font-mono tabular-nums">
-            {trend > 0 ? '+' : ''}
-            {trend.toFixed(1)}
-          </span>
-          <span className="text-ink-secondary">vs prior 7d</span>
         </div>
+      ) : metadata && metadata.length > 0 ? (
+        <EngineeringMetadata items={metadata} align="start" />
       ) : (
         <div className="h-3" aria-hidden />
       )}

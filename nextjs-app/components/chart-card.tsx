@@ -5,6 +5,10 @@ import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
 import { Skeleton } from './skeleton';
+import {
+  EngineeringMetadata,
+  type MetadataItem,
+} from './industrial/engineering-metadata';
 
 interface ChartCardProps {
   title: string;
@@ -16,6 +20,10 @@ interface ChartCardProps {
   headerRight?: ReactNode;
   children: ReactNode;
   className?: string;
+  /** Optional uppercase category tag rendered above the title. */
+  overline?: string;
+  /** Optional engineering metadata rendered at the card footer. */
+  footerMetadata?: MetadataItem[];
 }
 
 /** White card wrapper used for every dashboard chart + mini-table. */
@@ -29,6 +37,8 @@ export function ChartCard({
   headerRight,
   children,
   className,
+  overline,
+  footerMetadata,
 }: ChartCardProps) {
   return (
     <section
@@ -39,6 +49,11 @@ export function ChartCard({
     >
       <header className="mb-4 flex items-start justify-between gap-4">
         <div className="min-w-0">
+          {overline && (
+            <p className="mb-1 font-mono text-[10px] uppercase tracking-[0.1em] text-ink-muted">
+              {overline}
+            </p>
+          )}
           <h3 className="text-base font-semibold text-ink-primary">{title}</h3>
           {description && (
             <p className="mt-0.5 text-[13px] text-ink-secondary">{description}</p>
@@ -77,6 +92,14 @@ export function ChartCard({
 
         {!loading && !error && children}
       </div>
+
+      {footerMetadata && footerMetadata.length > 0 && (
+        <EngineeringMetadata
+          items={footerMetadata}
+          align="between"
+          className="mt-3 border-t border-hairline-subtle pt-2"
+        />
+      )}
     </section>
   );
 }

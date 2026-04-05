@@ -5,10 +5,12 @@ import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import type { TestRecord } from '@/lib/types';
 import { formatDateShort, formatDistance } from '@/lib/format';
+import { isRowAnomaly } from '@/lib/operations';
 import { Button } from './ui/button';
 import { ResultBadge } from './result-badge';
 import { ConfidenceBadge } from './confidence-badge';
 import { Skeleton } from './skeleton';
+import { AnomalyAlertBadge } from './industrial/anomaly-alert-badge';
 
 type SortableKey =
   | 'test_id'
@@ -103,7 +105,8 @@ export function TestResultsTable({
                     key={col.key}
                     scope="col"
                     className={cn(
-                      'h-10 px-3 text-[10px] font-semibold uppercase tracking-wider text-ink-secondary',
+                      'h-9 px-3 text-[10px] font-semibold uppercase tracking-[0.08em] text-ink-muted',
+                      'border-r border-hairline-subtle last:border-r-0',
                       col.align === 'right' && 'text-right',
                       col.align === 'center' && 'text-center',
                       col.align !== 'right' && col.align !== 'center' && 'text-left',
@@ -146,7 +149,7 @@ export function TestResultsTable({
                 {Array.from({ length: 10 }).map((_, i) => (
                   <tr key={`skel-${i}`} className="border-b border-hairline-subtle">
                     {COLUMNS.map((col) => (
-                      <td key={col.key} className="h-10 px-3">
+                      <td key={col.key} className="h-9 px-3">
                         <Skeleton className="h-3 w-full" />
                       </td>
                     ))}
@@ -288,6 +291,8 @@ function FragmentRow({ row, isExpanded, onRowClick, renderExpanded }: FragmentRo
     }
   };
 
+  const severity = isRowAnomaly(row);
+
   return (
     <>
       <tr
@@ -297,14 +302,23 @@ function FragmentRow({ row, isExpanded, onRowClick, renderExpanded }: FragmentRo
         onClick={() => onRowClick(row.test_id)}
         onKeyDown={handleKey}
         className={cn(
-          'h-10 cursor-pointer border-b border-hairline-subtle transition-colors duration-150',
+          'relative h-9 cursor-pointer border-b border-hairline-subtle transition-colors duration-150',
           'hover:bg-hairline-subtle focus-visible:outline-none focus-visible:bg-hairline-subtle',
           isExpanded
             ? 'bg-magna-red/5'
             : 'odd:bg-surface-card even:bg-[#F9FAFB]',
         )}
       >
-        <td className="px-3 font-mono text-[12px] text-ink-primary">{row.test_id}</td>
+        <td className="relative px-3 font-mono text-[12px] text-ink-primary">
+          {severity && (
+            <AnomalyAlertBadge
+              severity={severity}
+              variant="inline-row"
+              tooltip={`${severity.toUpperCase()} — ${row.test_id}`}
+            />
+          )}
+          {row.test_id}
+        </td>
         <td className="px-3 text-ink-primary capitalize">{row.sensor_type}</td>
         <td className="px-3 font-mono text-[12px] text-ink-primary">{row.feature}</td>
         <td className="px-3 text-ink-primary truncate max-w-0" title={row.scenario}>
@@ -313,7 +327,7 @@ function FragmentRow({ row, isExpanded, onRowClick, renderExpanded }: FragmentRo
         <td className="px-3 text-center">
           <ResultBadge result={row.result} size="sm" />
         </td>
-        <td className="px-3 text-center">
+        <td className="px-3 text-center font-mono tabular-nums">
           <ConfidenceBadge score={row.confidence_score} size="sm" />
         </td>
         <td className="px-3 text-right font-mono text-[12px] text-ink-primary tabular-nums">

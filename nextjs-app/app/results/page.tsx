@@ -4,6 +4,7 @@ import { Suspense, useMemo, useState } from 'react';
 import { ScenarioFilter } from '@/components/scenario-filter';
 import { TestResultsTable } from '@/components/test-results-table';
 import { TestResultsRowDetail } from '@/components/test-results-row-detail';
+import { EngineeringMetadata } from '@/components/industrial/engineering-metadata';
 import { useFiltersUrlSync } from '@/lib/hooks/use-filters-url-sync';
 import { useTests } from '@/lib/hooks/use-tests';
 import type { TestRecord } from '@/lib/types';
@@ -78,6 +79,15 @@ function ResultsPageInner() {
             'Loading validation records…'
           )}
         </p>
+        <EngineeringMetadata
+          items={[
+            { label: 'records', value: (data?.total ?? 0).toLocaleString() },
+            { label: 'filters', value: `${activeCount} active` },
+            { label: 'page', value: `${filters.page ?? 1}/${data?.total_pages ?? 1}` },
+          ]}
+          align="start"
+          className="mt-2"
+        />
       </header>
 
       <ScenarioFilter

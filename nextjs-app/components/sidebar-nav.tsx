@@ -62,18 +62,12 @@ export function SidebarNav({ chatOpen, onToggleChat }: SidebarNavProps) {
                   href={item.href}
                   aria-current={isActive ? 'page' : undefined}
                   className={cn(
-                    'group relative flex h-11 items-center gap-3 rounded-md pl-4 pr-3 text-sm transition-colors',
+                    'group flex h-11 items-center gap-3 rounded-md pr-3 text-sm transition-colors',
                     isActive
-                      ? 'bg-surface-elevated text-ink-on-dark'
-                      : 'text-ink-muted hover:bg-white/[0.04] hover:text-ink-on-dark',
+                      ? 'border-l-[3px] border-magna-red bg-white/[0.02] pl-[13px] text-ink-on-dark'
+                      : 'pl-4 text-ink-muted hover:bg-white/[0.04] hover:text-ink-on-dark',
                   )}
                 >
-                  {isActive && (
-                    <span
-                      className="absolute bottom-2 left-0 top-2 w-1 rounded-r bg-magna-red"
-                      aria-hidden="true"
-                    />
-                  )}
                   <Icon className="h-[18px] w-[18px] flex-shrink-0" strokeWidth={2} />
                   <span className="font-medium">{item.label}</span>
                 </Link>
@@ -82,6 +76,11 @@ export function SidebarNav({ chatOpen, onToggleChat }: SidebarNavProps) {
           })}
         </ul>
       </nav>
+
+      {/* Engineering metadata footer */}
+      <div className="metadata-strip border-t border-white/5 px-6 pb-2 pt-3">
+        build v4.2.1 · env prod · api /v1
+      </div>
 
       {/* Bottom — AI Agent toggle */}
       <div className="border-t border-white/5 p-3">

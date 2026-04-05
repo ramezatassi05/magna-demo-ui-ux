@@ -101,12 +101,12 @@ export function ScenarioFilter({
         />
 
         {/* Date range */}
-        <div className="inline-flex items-center gap-1.5 rounded-md border border-hairline bg-surface-card px-2 h-9">
+        <div className="inline-flex items-center gap-1 rounded-md border border-hairline bg-surface-card px-2 h-8">
           <input
             type="date"
             value={filters.date_from ?? ''}
             onChange={(e) => onChange({ date_from: e.target.value || undefined })}
-            className="border-0 bg-transparent text-xs font-mono text-ink-primary focus-visible:outline-none"
+            className="border-0 bg-transparent text-[11px] font-mono text-ink-primary focus-visible:outline-none"
             aria-label="Date from"
           />
           <span className="text-ink-muted" aria-hidden>
@@ -116,13 +116,13 @@ export function ScenarioFilter({
             type="date"
             value={filters.date_to ?? ''}
             onChange={(e) => onChange({ date_to: e.target.value || undefined })}
-            className="border-0 bg-transparent text-xs font-mono text-ink-primary focus-visible:outline-none"
+            className="border-0 bg-transparent text-[11px] font-mono text-ink-primary focus-visible:outline-none"
             aria-label="Date to"
           />
         </div>
 
         {activeCount > 0 && (
-          <span className="inline-flex h-6 items-center rounded-full bg-magna-red/10 px-2 text-[11px] font-medium text-magna-red">
+          <span className="inline-flex h-6 items-center rounded-full bg-magna-red/10 px-2 text-[11px] font-mono font-medium tabular-nums text-magna-red">
             {activeCount} active
           </span>
         )}

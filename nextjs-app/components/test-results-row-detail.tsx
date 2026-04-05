@@ -1,6 +1,9 @@
 import type { TestRecord } from '@/lib/types';
 import { formatDateLong, formatDistance, formatPercent } from '@/lib/format';
-import { ConfidenceBadge } from './confidence-badge';
+import { explainRow } from '@/lib/operations';
+import { ConfidenceMeter } from './industrial/confidence-meter';
+import { WhyPopover } from './industrial/why-popover';
+import { EngineeringMetadata } from './industrial/engineering-metadata';
 
 interface TestResultsRowDetailProps {
   row: TestRecord;
@@ -47,7 +50,12 @@ export function TestResultsRowDetail({ row }: TestResultsRowDetailProps) {
             </div>
           )}
         </div>
-        <ConfidenceBadge score={row.confidence_score} showScore size="md" />
+        <ConfidenceMeter
+          score={row.confidence_score}
+          size="md"
+          label="Detection confidence"
+          showValue
+        />
       </div>
 
       <dl className="grid grid-cols-2 gap-x-6 gap-y-2 md:grid-cols-3">
@@ -65,16 +73,32 @@ export function TestResultsRowDetail({ row }: TestResultsRowDetailProps) {
 
       {row.notes && (
         <div>
-          <p className="text-[11px] uppercase tracking-wider font-semibold text-ink-secondary mb-1">
-            Engineering Notes
-          </p>
+          <div className="mb-1 flex items-center gap-2">
+            <p className="text-[11px] uppercase tracking-wider font-semibold text-ink-secondary">
+              Engineering Notes
+            </p>
+            <WhyPopover
+              title="Why this result"
+              subtitle={row.test_id}
+              dataPoints={explainRow(row)}
+              align="start"
+              side="bottom"
+            />
+          </div>
           <p className="text-[13px] italic text-ink-secondary">{row.notes}</p>
         </div>
       )}
 
-      <p className="text-[11px] font-mono text-ink-muted">
-        {formatDateLong(row.timestamp)} · {row.test_id}
-      </p>
+      <EngineeringMetadata
+        items={[
+          { label: 'run', value: row.test_id },
+          { label: 'firmware', value: row.firmware_version },
+          { label: 'vehicle', value: row.vehicle_model },
+          { label: 'ts', value: formatDateLong(row.timestamp) },
+        ]}
+        align="start"
+        className="border-t border-hairline-subtle pt-3"
+      />
     </div>
   );
 }

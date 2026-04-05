@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Activity,
   AlertTriangle,
@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { ChartCard } from '@/components/chart-card';
 import { KpiCard } from '@/components/kpi-card';
+import { EngineeringMetadata } from '@/components/industrial/engineering-metadata';
 import { SensorResultsBar } from '@/components/charts/sensor-results-bar';
 import { ResultDonut } from '@/components/charts/result-donut';
 import { DailyTrendLine } from '@/components/charts/daily-trend-line';
@@ -47,6 +48,12 @@ export default function DashboardPage() {
     () => (trends ? computePassRateDelta(trends) : 0),
     [trends],
   );
+
+  // Client-only "last updated" timestamp — avoid hydration mismatch.
+  const [updatedAt, setUpdatedAt] = useState<string>('—');
+  useEffect(() => {
+    setUpdatedAt(new Date().toISOString().slice(0, 16) + 'Z');
+  }, []);
   const sensorBreakdown = useMemo(
     () => (allTests ? aggregateBySensorResult(allTests) : []),
     [allTests],
@@ -65,6 +72,15 @@ export default function DashboardPage() {
           Aggregate validation metrics across Magna&rsquo;s camera-radar fusion,
           thermal-Doppler, and LiDAR sensor suites — 90-day rolling window.
         </p>
+        <EngineeringMetadata
+          items={[
+            { label: 'window', value: '90d' },
+            { label: 'campaign', value: 'Q2-2026' },
+            { label: 'updated', value: updatedAt },
+          ]}
+          align="start"
+          className="mt-2"
+        />
       </header>
 
       {/* Row 1 — KPI cards */}
@@ -92,7 +108,7 @@ export default function DashboardPage() {
           icon={CheckCircle2}
         />
         <KpiCard
-          label="Mean Detection Distance"
+          label="Mean Detection Range"
           value={stats?.mean_detection_distance ?? 0}
           unit="m"
           decimals={1}
@@ -120,6 +136,7 @@ export default function DashboardPage() {
         style={{ animationDelay: '160ms' }}
       >
         <ChartCard
+          overline="DIAGNOSTICS"
           title="Results by Sensor Type"
           description="Stacked validation outcomes across camera, radar, thermal, LiDAR"
           loading={allLoading}
@@ -130,6 +147,7 @@ export default function DashboardPage() {
         </ChartCard>
 
         <ChartCard
+          overline="ANALYTICS"
           title="Result Distribution"
           description="Pass / fail / warning across all validation runs"
           loading={statsLoading}
@@ -147,6 +165,7 @@ export default function DashboardPage() {
       >
         <div className="lg:col-span-8">
           <ChartCard
+            overline="TELEMETRY"
             title="Daily Failures — Last 30 Days"
             description="Fail + warning counts from validation campaigns"
             loading={trendsLoading}
@@ -158,6 +177,7 @@ export default function DashboardPage() {
         </div>
         <div className="lg:col-span-4">
           <ChartCard
+            overline="DIAGNOSTICS"
             title="Recent Failures"
             description="Latest 8 failed validation runs"
             loading={recentLoading}
