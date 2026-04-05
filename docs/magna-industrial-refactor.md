@@ -20,7 +20,7 @@
 - ✅ **Phase D — Composite components (ScopingPresets, ParameterSliderPanel, DynamicTaskCard, DecisionTrace, ManualOverrideControl, SimulatedRibbon)** — COMPLETE
 - ✅ **Phase E — Visual refresh of existing components** — COMPLETE
 - ✅ **Phase F — Page integration (Dashboard, Results, Test Generator, Chat)** — COMPLETE
-- ⬜ **Phase G — Test + polish (Playwright, a11y, reduced-motion, bundle, screenshots)** — TODO
+- ✅ **Phase G — Test + polish (Playwright, a11y, reduced-motion, bundle, screenshots)** — COMPLETE
 
 ## General Rules for All Phases
 

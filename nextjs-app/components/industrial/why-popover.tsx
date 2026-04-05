@@ -1,6 +1,6 @@
 'use client';
 
-import { type ReactNode } from 'react';
+import { useId, type ReactNode } from 'react';
 
 import {
   Popover,
@@ -75,6 +75,8 @@ export function WhyPopover({
   const hasContent =
     (dataPoints && dataPoints.length > 0) || (logic && logic.length > 0) || rationale;
 
+  const titleId = useId();
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -93,12 +95,20 @@ export function WhyPopover({
           </button>
         )}
       </PopoverTrigger>
-      <PopoverContent align={align} side={side} className="w-96 max-w-[calc(100vw-2rem)] p-0">
+      <PopoverContent
+        align={align}
+        side={side}
+        aria-labelledby={titleId}
+        className="w-96 max-w-[calc(100vw-2rem)] p-0"
+      >
         <div className="border-b border-hairline px-4 py-3">
           <div className="flex items-start gap-2">
             <IndustrialIcon name="Reasoning" size="sm" tone="brand" className="mt-0.5" />
             <div className="min-w-0 flex-1">
-              <h4 className="font-mono text-[13px] font-semibold leading-tight text-ink-primary">
+              <h4
+                id={titleId}
+                className="font-mono text-[13px] font-semibold leading-tight text-ink-primary"
+              >
                 {title}
               </h4>
               {subtitle && (

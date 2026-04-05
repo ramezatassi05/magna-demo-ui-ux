@@ -30,7 +30,9 @@ export default defineConfig({
   ],
 
   webServer: {
-    command: 'npm run dev',
+    // Production server: stable + fast route compilation. Run
+    // `npm run build` once before the first E2E run.
+    command: 'npm run start',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

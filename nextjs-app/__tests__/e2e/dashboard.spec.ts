@@ -119,7 +119,7 @@ test.describe('Dashboard page', () => {
     ).toBeVisible();
     await expect(page.getByText('Pass Rate', { exact: true })).toBeVisible();
     await expect(
-      page.getByText('Mean Detection Distance', { exact: true }),
+      page.getByText('Mean Detection Range', { exact: true }),
     ).toBeVisible();
     await expect(
       page.getByText('False Positive Rate', { exact: true }),

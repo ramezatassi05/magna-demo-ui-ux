@@ -3,9 +3,14 @@
 *Internal R&D tool for automotive engineers to query ADAS sensor test results, auto-generate test cases, and visualize quality metrics — built as two apps sharing one FastAPI + LangGraph backend.*
 
 <p align="center">
-  <img src="docs/screenshots/dashboard.png" alt="Dashboard with KPI cards and charts" width="32%" />
-  <img src="docs/screenshots/chat.png" alt="AI agent chat with inline chart rendering" width="32%" />
-  <img src="docs/screenshots/generator.png" alt="AI test case generator with approval workflow" width="32%" />
+  <img src="docs/screenshots/dashboard-full.png" alt="Dashboard with operational task cards, KPI anomaly corners, and industrial charts" width="32%" />
+  <img src="docs/screenshots/chat-trace-expanded.png" alt="AI agent chat with DecisionTrace reasoning tree" width="32%" />
+  <img src="docs/screenshots/test-generator-full.png" alt="AI test case generator with confidence meters and WhyPopovers" width="32%" />
+</p>
+<p align="center">
+  <img src="docs/screenshots/results-full.png" alt="Results table with scoping presets and inline anomaly strips" width="32%" />
+  <img src="docs/screenshots/parameter-sim-active.png" alt="Parameter slider panel open with SIMULATED ribbon" width="32%" />
+  <img src="docs/screenshots/manual-override-dialog.png" alt="Manual agent override confirmation dialog" width="32%" />
 </p>
 
 > Built as a portfolio project for the **Magna International Agentic AI Application UI/UX Co-op** (R00233555). Demonstrates Streamlit-to-Next.js migration, reusable component library design, agentic AI integration, and frontend testing — the three core deliverables of the role.
