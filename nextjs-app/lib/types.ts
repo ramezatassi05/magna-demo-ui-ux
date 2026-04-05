@@ -212,7 +212,19 @@ export interface TestCasesData {
   requirement: string;
   feature: Feature;
   cases: TestCase[];
+  /** Present on the direct POST /api/test-cases response; omitted in SSE. */
+  generation_mode?: 'template';
 }
+
+/** Request body for POST /api/test-cases. */
+export interface TestCasesRequest {
+  requirement: string;
+  feature?: Feature;
+  count?: number;
+}
+
+/** Human-in-the-loop approval state tracked per-card on the generator page. */
+export type ApprovalStatus = 'approved' | 'rejected' | null;
 
 export interface TestCasesEvent extends AgentEventBase, TestCasesData {
   type: 'test_cases';

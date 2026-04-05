@@ -13,6 +13,8 @@
 
 import type {
   PaginatedTests,
+  TestCasesData,
+  TestCasesRequest,
   TestFilters,
   TestRecord,
   TestStats,
@@ -84,4 +86,32 @@ export function getStats(): Promise<TestStats> {
 
 export function getTrends(): Promise<TrendPoint[]> {
   return request<TrendPoint[]>('/api/stats/trends');
+}
+
+/**
+ * Generate structured ADAS test cases from a natural-language requirement.
+ * POSTs to the Next.js proxy route (/api/test-cases) via a same-origin
+ * relative fetch, which forwards to FastAPI. Synchronous — no streaming.
+ *
+ * Uses a relative URL instead of `request<T>` because that helper prepends
+ * NEXT_PUBLIC_API_URL (the FastAPI origin); the proxy is same-origin.
+ */
+export async function generateTestCases(
+  body: TestCasesRequest,
+): Promise<TestCasesData> {
+  const url = '/api/test-cases';
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    throw new ApiError(
+      res.status,
+      url,
+      `API ${res.status} ${res.statusText}: ${text.slice(0, 200)}`,
+    );
+  }
+  return (await res.json()) as TestCasesData;
 }

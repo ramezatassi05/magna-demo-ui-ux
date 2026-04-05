@@ -23,6 +23,8 @@ from pydantic import BaseModel, Field
 
 from agent import run_agent_stream
 from database import get_connection, row_to_dict, seed_database
+from test_case_templates import build_test_cases
+from tools import _infer_feature
 
 # ---------------------------------------------------------------------------
 # Pydantic response models
@@ -81,6 +83,40 @@ class ChatMessage(BaseModel):
 class ChatRequest(BaseModel):
     messages: list[ChatMessage]
     session_id: str | None = None
+
+
+# ---------------------------------------------------------------------------
+# Test-case generation models (powers the Next.js Test Generator page)
+# ---------------------------------------------------------------------------
+
+
+Feature = Literal["AEB", "FCW", "LCA", "BSD", "ACC", "TSR"]
+
+
+class GenerateTestCasesRequest(BaseModel):
+    requirement: str = Field(..., min_length=1, max_length=4000)
+    feature: Feature | None = None
+    count: int = Field(5, ge=1, le=10)
+
+
+class GeneratedTestCase(BaseModel):
+    test_id: str
+    title: str
+    preconditions: list[str]
+    steps: list[str]
+    expected_result: str
+    pass_criteria: str
+    priority: Literal["high", "medium", "low"]
+    estimated_duration_min: int
+    confidence: Literal["high", "medium", "low"]
+    rationale: str | None = None
+
+
+class GenerateTestCasesResponse(BaseModel):
+    requirement: str
+    feature: Feature
+    cases: list[GeneratedTestCase]
+    generation_mode: Literal["template"] = "template"
 
 
 # ---------------------------------------------------------------------------
@@ -355,4 +391,28 @@ async def chat(req: ChatRequest):
             "Connection": "keep-alive",
             "X-Accel-Buffering": "no",
         },
+    )
+
+
+# ---------------------------------------------------------------------------
+# /api/test-cases — direct (non-streaming) generation for the Next.js
+# Test Generator page. Form-submission flow; no LLM reasoning required since
+# the underlying build_test_cases() is deterministic template rendering.
+# ---------------------------------------------------------------------------
+
+
+@app.post("/api/test-cases", response_model=GenerateTestCasesResponse)
+def generate_test_cases_endpoint(
+    req: GenerateTestCasesRequest,
+) -> GenerateTestCasesResponse:
+    resolved_feature: Feature = req.feature or _infer_feature(req.requirement)  # type: ignore[assignment]
+    cases = build_test_cases(
+        requirement=req.requirement,
+        feature=resolved_feature,
+        count=req.count,
+    )
+    return GenerateTestCasesResponse(
+        requirement=req.requirement,
+        feature=resolved_feature,
+        cases=[GeneratedTestCase(**c) for c in cases],
     )

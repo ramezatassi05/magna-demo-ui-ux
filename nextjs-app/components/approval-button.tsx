@@ -4,31 +4,60 @@ import { useState } from 'react';
 import { Check, X } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
+import type { ApprovalStatus } from '@/lib/types';
 
-type ApprovalState = 'pending' | 'approved' | 'rejected';
+type InternalState = 'pending' | 'approved' | 'rejected';
 
 interface ApprovalButtonProps {
   /** Opaque identifier forwarded to callbacks; not displayed. */
   testId: string;
   onApprove?: (testId: string) => void;
   onReject?: (testId: string) => void;
+  /**
+   * Optional controlled status. When provided, the component is controlled
+   * and calls `onStatusChange` on transitions. When omitted, the component
+   * manages its own internal state (backward-compatible with chat usage).
+   */
+  status?: ApprovalStatus;
+  onStatusChange?: (testId: string, next: ApprovalStatus) => void;
 }
 
 /**
  * Human-in-the-loop control attached to each AI-generated test case.
- * Toggles between a two-button prompt and a single resolved chip with
- * an Undo affordance. State is local — persistence is out of scope
- * for Phase 6.
+ *
+ * Uncontrolled mode: toggles local state between pending/approved/rejected.
+ * Controlled mode: delegates state to parent via `status` + `onStatusChange`,
+ * letting the page track per-card approvals for export filtering.
  */
 export function ApprovalButton({
   testId,
   onApprove,
   onReject,
+  status,
+  onStatusChange,
 }: ApprovalButtonProps) {
-  const [state, setState] = useState<ApprovalState>('pending');
+  const isControlled = status !== undefined;
+  const [internal, setInternal] = useState<InternalState>('pending');
 
-  if (state === 'approved' || state === 'rejected') {
-    const approved = state === 'approved';
+  const resolved: InternalState = isControlled
+    ? (status ?? null) === 'approved'
+      ? 'approved'
+      : status === 'rejected'
+        ? 'rejected'
+        : 'pending'
+    : internal;
+
+  const setResolved = (next: InternalState) => {
+    if (isControlled) {
+      const mapped: ApprovalStatus = next === 'pending' ? null : next;
+      onStatusChange?.(testId, mapped);
+    } else {
+      setInternal(next);
+    }
+  };
+
+  if (resolved === 'approved' || resolved === 'rejected') {
+    const approved = resolved === 'approved';
     return (
       <div className="flex items-center justify-between pt-1">
         <span
@@ -48,7 +77,7 @@ export function ApprovalButton({
         </span>
         <button
           type="button"
-          onClick={() => setState('pending')}
+          onClick={() => setResolved('pending')}
           className="font-mono text-[10px] uppercase tracking-wider text-ink-muted transition-colors hover:text-ink-on-dark focus-visible:outline-none focus-visible:text-ink-on-dark"
         >
           Undo
@@ -62,7 +91,7 @@ export function ApprovalButton({
       <button
         type="button"
         onClick={() => {
-          setState('approved');
+          setResolved('approved');
           onApprove?.(testId);
         }}
         className={cn(
@@ -77,7 +106,7 @@ export function ApprovalButton({
       <button
         type="button"
         onClick={() => {
-          setState('rejected');
+          setResolved('rejected');
           onReject?.(testId);
         }}
         className={cn(
