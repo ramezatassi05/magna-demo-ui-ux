@@ -4,9 +4,19 @@ import { useState } from 'react';
 import { Check, Pencil, X } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import type { ApprovalStatus, TestCase, TestCasePriority } from '@/lib/types';
+import type {
+  ApprovalStatus,
+  TestCase,
+  TestCaseConfidence,
+  TestCasePriority,
+} from '@/lib/types';
 import { ApprovalButton } from '@/components/approval-button';
-import { ConfidenceBadge } from '@/components/confidence-badge';
+import { ConfidenceMeter } from '@/components/industrial/confidence-meter';
+import { EngineeringMetadata } from '@/components/industrial/engineering-metadata';
+import {
+  WhyPopover,
+  type RationaleDataPoint,
+} from '@/components/industrial/why-popover';
 
 interface TestCaseCardLightProps {
   testCase: TestCase;
@@ -15,6 +25,12 @@ interface TestCaseCardLightProps {
   /** Called when the user saves inline edits. Returns the updated case. */
   onEdit: (updated: TestCase) => void;
 }
+
+const CONFIDENCE_TO_SCORE: Record<TestCaseConfidence, number> = {
+  low: 0.5,
+  medium: 0.75,
+  high: 0.92,
+};
 
 const PRIORITY_STYLES: Record<TestCasePriority, string> = {
   high: 'bg-status-fail/10 text-status-fail border-status-fail/20',
@@ -62,6 +78,44 @@ export function TestCaseCardLight({
       ? STATUS_BORDER[approvalStatus as Exclude<ApprovalStatus, null>]
       : 'border-hairline';
 
+  // Build the rationale payload from the TestCase fields that exist today.
+  // The backend doesn't yet expose a `rationale` / `template` / `gen_id`
+  // payload — so we synthesize dataPoints from the template output fields.
+  const whyDataPoints: RationaleDataPoint[] = [
+    {
+      label: 'Confidence',
+      value: tc.confidence,
+      weight: 'primary',
+      tone:
+        tc.confidence === 'high'
+          ? 'nominal'
+          : tc.confidence === 'low'
+          ? 'critical'
+          : 'anomaly',
+    },
+    {
+      label: 'Priority',
+      value: tc.priority,
+      weight: 'primary',
+      tone: tc.priority === 'high' ? 'critical' : 'nominal',
+    },
+    {
+      label: 'Est. duration',
+      value: `${tc.estimated_duration_min} min`,
+      weight: 'secondary',
+    },
+    {
+      label: 'Preconditions',
+      value: tc.preconditions.length,
+      weight: 'secondary',
+    },
+    {
+      label: 'Steps',
+      value: tc.steps.length,
+      weight: 'secondary',
+    },
+  ];
+
   return (
     <article
       className={cn(
@@ -101,7 +155,22 @@ export function TestCaseCardLight({
           </div>
         </div>
         <div className="flex flex-col items-end gap-2">
-          <ConfidenceBadge level={tc.confidence} size="md" />
+          <div className="flex items-start gap-2">
+            <ConfidenceMeter
+              score={CONFIDENCE_TO_SCORE[tc.confidence]}
+              size="sm"
+              label="Confidence"
+              showValue
+            />
+            <WhyPopover
+              title="Why this test case?"
+              subtitle={`Generated for ${tc.test_id}`}
+              dataPoints={whyDataPoints}
+              align="end"
+              side="bottom"
+              triggerAriaLabel="Show test case rationale"
+            />
+          </div>
           {!editing && (
             <button
               type="button"
@@ -184,6 +253,18 @@ export function TestCaseCardLight({
           )}
         </Section>
       </div>
+
+      {/* Engineering metadata strip */}
+      <EngineeringMetadata
+        items={[
+          { label: 'id', value: tc.test_id },
+          { label: 'priority', value: tc.priority },
+          { label: 'duration', value: `${tc.estimated_duration_min}m` },
+          { label: 'confidence', value: tc.confidence },
+        ]}
+        align="between"
+        className="mt-3 border-t border-hairline-subtle pt-2"
+      />
 
       {/* Footer — edit save/cancel OR approval */}
       <div className="mt-3 border-t border-hairline-subtle pt-3">

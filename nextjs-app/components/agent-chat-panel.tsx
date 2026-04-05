@@ -1,9 +1,12 @@
 'use client';
 
+import { useMemo, useState } from 'react';
 import { X, Sparkles, AlertCircle } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { useAgentChat } from '@/hooks/use-agent-chat';
+import { EngineeringMetadata } from './industrial/engineering-metadata';
+import { ManualOverrideControl } from './industrial/manual-override-control';
 import { ChatEmptyState } from './chat/chat-empty-state';
 import { ChatInput } from './chat/chat-input';
 import { ChatMessages } from './chat/chat-messages';
@@ -25,6 +28,7 @@ export function AgentChatPanel({ open, onClose }: AgentChatPanelProps) {
   const {
     messages,
     input,
+    setInput,
     handleInputChange,
     handleSubmit,
     submitPrompt,
@@ -34,6 +38,26 @@ export function AgentChatPanel({ open, onClose }: AgentChatPanelProps) {
   } = useAgentChat();
 
   const bodyTabIndex = open ? 0 : -1;
+
+  // One session id for the panel's lifetime. Exposed in the header strip
+  // so support/logs can cross-reference without backend coupling.
+  const [sessionId] = useState(
+    () => `ses_${Math.random().toString(36).slice(2, 10)}`,
+  );
+
+  const toolCount = useMemo(
+    () =>
+      messages.reduce(
+        (n, m) => (m.role === 'assistant' ? n + m.toolCalls.length : n),
+        0,
+      ),
+    [messages],
+  );
+
+  const handleInjectFilter = (filter: string) => {
+    const prefix = `[scope: ${filter}]`;
+    setInput(input ? `${prefix} ${input}` : `${prefix} `);
+  };
 
   return (
     <aside
@@ -46,37 +70,48 @@ export function AgentChatPanel({ open, onClose }: AgentChatPanelProps) {
       )}
     >
       {/* Header */}
-      <header className="flex items-center justify-between border-b border-white/5 px-5 py-4">
-        <div className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-agent-thinking/20">
-            <Sparkles
-              className="h-4 w-4 text-agent-thinking"
-              strokeWidth={2.2}
-              aria-hidden="true"
-            />
-          </div>
-          <div>
-            <div className="font-mono text-[13px] font-semibold text-ink-on-dark">
-              AI Agent
+      <header className="border-b border-white/5 px-5 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="flex h-7 w-7 items-center justify-center rounded-md bg-agent-thinking/20">
+              <Sparkles
+                className="h-4 w-4 text-agent-thinking"
+                strokeWidth={2.2}
+                aria-hidden="true"
+              />
             </div>
-            <div className="font-mono text-[10px] uppercase tracking-wider text-ink-muted">
-              ADAS Assistant
+            <div>
+              <div className="font-mono text-[13px] font-semibold text-ink-on-dark">
+                AI Agent
+              </div>
+              <div className="font-mono text-[10px] uppercase tracking-wider text-ink-muted">
+                ADAS Assistant
+              </div>
             </div>
           </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close chat panel"
+            tabIndex={bodyTabIndex}
+            className={cn(
+              'flex h-8 w-8 items-center justify-center rounded-md text-ink-muted transition-colors',
+              'hover:bg-white/[0.04] hover:text-ink-on-dark',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-magna-red focus-visible:ring-offset-2 focus-visible:ring-offset-surface-dark',
+            )}
+          >
+            <X className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close chat panel"
-          tabIndex={bodyTabIndex}
-          className={cn(
-            'flex h-8 w-8 items-center justify-center rounded-md text-ink-muted transition-colors',
-            'hover:bg-white/[0.04] hover:text-ink-on-dark',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-magna-red focus-visible:ring-offset-2 focus-visible:ring-offset-surface-dark',
-          )}
-        >
-          <X className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
-        </button>
+        <EngineeringMetadata
+          items={[
+            { label: 'ses', value: sessionId },
+            { label: 'msgs', value: messages.length },
+            { label: 'tools', value: toolCount },
+          ]}
+          align="start"
+          className="mt-2"
+        />
       </header>
 
       {/* Body: empty state OR message list */}
@@ -103,6 +138,13 @@ export function AgentChatPanel({ open, onClose }: AgentChatPanelProps) {
           </div>
         </div>
       )}
+
+      {/* Manual override — stop agent mid-run, inject scope prefix */}
+      <ManualOverrideControl
+        status={status}
+        onStop={stop}
+        onInjectFilter={handleInjectFilter}
+      />
 
       {/* Input */}
       <ChatInput

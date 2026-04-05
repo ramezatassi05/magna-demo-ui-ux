@@ -5,6 +5,7 @@ import { ScenarioFilter } from '@/components/scenario-filter';
 import { TestResultsTable } from '@/components/test-results-table';
 import { TestResultsRowDetail } from '@/components/test-results-row-detail';
 import { EngineeringMetadata } from '@/components/industrial/engineering-metadata';
+import { ScopingPresets } from '@/components/industrial/scoping-presets';
 import { useFiltersUrlSync } from '@/lib/hooks/use-filters-url-sync';
 import { useTests } from '@/lib/hooks/use-tests';
 import type { TestRecord } from '@/lib/types';
@@ -89,6 +90,11 @@ function ResultsPageInner() {
           className="mt-2"
         />
       </header>
+
+      <ScopingPresets
+        onApply={updateFilters}
+        currentFilters={filters}
+      />
 
       <ScenarioFilter
         filters={filters}
