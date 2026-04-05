@@ -5,7 +5,8 @@
 /**
  * Design tokens — single source of truth.
  * Tailwind utilities in tailwind.config.ts reference these variables.
- * Mirrors CLAUDE.md:117-150.
+ * Base system mirrors CLAUDE.md:117-150; industrial extensions (state.*,
+ * motion.*, meter.*) are layered on top for Magna R&D parity.
  */
 :root {
   /* Surfaces — dark sidebar, light content */
@@ -38,6 +39,38 @@
   /* Borders */
   --border-default: #E5E7EB;
   --border-subtle: #F3F4F6;
+
+  /* ── State Rules: daylight-readable industrial alerts ──
+     Factory-floor lighting causes WCAG failures below 7:1 on glossy panels.
+     These variants crank saturation + contrast for high-ambient environments. */
+  --state-critical: #B00020;
+  --state-critical-bg: #FFF1F2;
+  --state-critical-border: #DC2626;
+  --state-anomaly: #D97706;
+  --state-anomaly-bg: #FFFBEB;
+  --state-anomaly-border: #F59E0B;
+  --state-override: #1D4ED8;
+  --state-override-bg: #EFF6FF;
+  --state-override-border: #3B82F6;
+  --state-nominal: #047857;
+
+  /* ── Motion tokens (paired with framer-motion config in lib/motion-tokens.ts) ── */
+  --motion-instant: 80ms;
+  --motion-quick: 160ms;
+  --motion-standard: 240ms;
+  --motion-emphasis: 360ms;
+  --motion-attention: 1400ms;
+
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-emphasis: cubic-bezier(0.2, 0, 0, 1);
+  --ease-decelerate: cubic-bezier(0, 0, 0.2, 1);
+  --ease-accelerate: cubic-bezier(0.4, 0, 1, 1);
+
+  /* ── Confidence meter arc tokens ── */
+  --meter-track: #E5E7EB;
+  --meter-fill-high: var(--status-pass);
+  --meter-fill-med: var(--status-warning);
+  --meter-fill-low: var(--status-fail);
 }
 
 /* Base styles */
@@ -60,6 +93,17 @@ code,
 pre,
 .font-mono {
   font-family: var(--font-jetbrains-mono), ui-monospace, 'SFMono-Regular', monospace;
+}
+
+/* Engineering metadata strip — mono, uppercase-tracked, muted
+   Applied to run_id · duration · row_count · timestamp footers */
+.metadata-strip {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 10px;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
 }
 
 /* Scrollbar styling for dark panels */
@@ -97,6 +141,37 @@ pre,
   animation: agent-pulse 1.4s ease-in-out infinite;
 }
 
+/* Anomaly pulse — box-shadow halo for critical alerts (factory-floor attention) */
+@keyframes anomaly-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(176, 0, 32, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(176, 0, 32, 0);
+  }
+}
+
+.animate-anomaly-pulse {
+  animation: anomaly-pulse 2.4s ease-out infinite;
+}
+
+/* Confirmation flash — one-shot background wash for successful action feedback */
+@keyframes confirmation-flash {
+  0% {
+    background-color: rgba(4, 120, 87, 0.0);
+  }
+  30% {
+    background-color: rgba(4, 120, 87, 0.18);
+  }
+  100% {
+    background-color: rgba(4, 120, 87, 0.0);
+  }
+}
+
+.animate-confirmation-flash {
+  animation: confirmation-flash 600ms var(--ease-standard);
+}
+
 /* Skeleton shimmer — used in loading states */
 @keyframes skeleton-shimmer {
   0% {
@@ -118,7 +193,8 @@ pre,
   animation: skeleton-shimmer 1.6s linear infinite;
 }
 
-/* Fade-in entrance — used with animation-delay for staggered dashboard rows */
+/* Fade-in entrance — used with animation-delay for staggered dashboard rows
+   Retained for backward compat; new surfaces should use MotionPrimitives. */
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -147,4 +223,26 @@ pre,
 
 .expand-row-wrapper > div {
   overflow: hidden;
+}
+
+/* Keyboard-only focus fallback — uses :where() for zero specificity, so
+   any component-level Tailwind focus-visible:ring-* or
+   focus-visible:outline-none utility takes precedence automatically. */
+:where(:focus-visible) {
+  outline: 2px solid var(--magna-red);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Respect reduced-motion globally — kills all decorative animations.
+   This is a safety net; framer-motion surfaces also internally gate via
+   useReducedMotion() so structure doesn't depend on animation. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-agent-pulse,
+  .animate-anomaly-pulse,
+  .animate-confirmation-flash,
+  .animate-fade-in,
+  .skeleton-shimmer {
+    animation: none !important;
+  }
 }

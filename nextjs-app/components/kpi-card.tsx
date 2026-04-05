@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowDownRight, ArrowUpRight, type LucideIcon } from 'lucide-react';
+import { AlertCircle, ArrowDownRight, ArrowUpRight, type LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useCountUp } from '@/lib/hooks/use-count-up';
 import { Skeleton } from './skeleton';
@@ -15,6 +15,8 @@ interface KpiCardProps {
   trend?: number;
   accentColor: Accent;
   loading?: boolean;
+  /** If set (and not loading), the value is replaced by an error glyph + tooltip. */
+  error?: Error | null;
   icon?: LucideIcon;
   decimals?: number;
   /** Inverts trend coloring for metrics where "down" is good (e.g. FPR). */
@@ -36,6 +38,7 @@ export function KpiCard({
   trend,
   accentColor,
   loading = false,
+  error = null,
   icon: Icon,
   decimals = 0,
   invertTrend = false,
@@ -66,6 +69,20 @@ export function KpiCard({
 
       {loading ? (
         <Skeleton className="h-7 w-24" />
+      ) : error ? (
+        <div
+          className="flex items-center gap-2"
+          role="alert"
+          title={error.message}
+        >
+          <AlertCircle
+            className="h-5 w-5 text-status-fail"
+            aria-label="Metric unavailable"
+          />
+          <span className="font-mono text-[28px] font-bold leading-none text-ink-secondary tabular-nums">
+            —
+          </span>
+        </div>
       ) : (
         <div className="flex items-baseline">
           <span className="font-mono text-[28px] font-bold leading-none text-ink-primary tabular-nums">
@@ -82,13 +99,17 @@ export function KpiCard({
 
       {loading ? (
         <Skeleton className="h-3 w-16" />
+      ) : error ? (
+        <div className="text-[11px] font-medium text-status-fail">
+          Failed to load
+        </div>
       ) : typeof trend === 'number' ? (
         <div
           className={cn(
             'inline-flex items-center gap-1 text-[11px] font-medium',
             trendPositive && 'text-status-pass',
             trendNegative && 'text-status-fail',
-            !trendPositive && !trendNegative && 'text-ink-muted',
+            !trendPositive && !trendNegative && 'text-ink-secondary',
           )}
         >
           <TrendIcon className="h-3 w-3" aria-hidden />
@@ -96,7 +117,7 @@ export function KpiCard({
             {trend > 0 ? '+' : ''}
             {trend.toFixed(1)}
           </span>
-          <span className="text-ink-muted">vs prior 7d</span>
+          <span className="text-ink-secondary">vs prior 7d</span>
         </div>
       ) : (
         <div className="h-3" aria-hidden />

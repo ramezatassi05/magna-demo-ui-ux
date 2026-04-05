@@ -100,6 +100,42 @@ describe('KpiCard', () => {
     expect(skeletons.length).toBeGreaterThanOrEqual(2);
   });
 
+  it('renders error glyph + fallback when error prop is set', () => {
+    const err = new Error('Failed to fetch /api/stats (503)');
+    render(
+      <KpiCard
+        label="Pass Rate"
+        value={78.4}
+        unit="%"
+        accentColor="pass"
+        error={err}
+      />,
+    );
+    // value is replaced by em-dash, original number should not be in DOM
+    expect(screen.queryByText('78.4')).not.toBeInTheDocument();
+    expect(screen.getByText('—')).toBeInTheDocument();
+    expect(screen.getByText('Failed to load')).toBeInTheDocument();
+    // The error container is marked role=alert with the error message as title
+    const alert = screen.getByRole('alert');
+    expect(alert).toHaveAttribute('title', 'Failed to fetch /api/stats (503)');
+  });
+
+  it('prefers loading state over error state', () => {
+    render(
+      <KpiCard
+        label="Pass Rate"
+        value={78.4}
+        accentColor="pass"
+        loading
+        error={new Error('should not show')}
+      />,
+    );
+    // loading wins — no error UI, no value
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    expect(screen.queryByText('Failed to load')).not.toBeInTheDocument();
+    expect(screen.queryByText('78.4')).not.toBeInTheDocument();
+  });
+
   it('applies the correct left-border accent class per variant', () => {
     const variants = [
       { accent: 'pass', cls: 'border-l-status-pass' },

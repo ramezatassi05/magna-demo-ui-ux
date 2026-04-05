@@ -77,6 +77,7 @@ export default function DashboardPage() {
           value={stats?.total_tests ?? 0}
           accentColor="magna"
           loading={statsLoading}
+          error={statsError ?? null}
           icon={Activity}
         />
         <KpiCard
@@ -87,6 +88,7 @@ export default function DashboardPage() {
           trend={passRateDelta}
           accentColor="pass"
           loading={statsLoading || trendsLoading}
+          error={statsError ?? trendsError ?? null}
           icon={CheckCircle2}
         />
         <KpiCard
@@ -96,6 +98,7 @@ export default function DashboardPage() {
           decimals={1}
           accentColor="info"
           loading={statsLoading}
+          error={statsError ?? null}
           icon={Radar}
         />
         <KpiCard
@@ -105,6 +108,7 @@ export default function DashboardPage() {
           decimals={2}
           accentColor="warning"
           loading={statsLoading}
+          error={statsError ?? null}
           icon={AlertTriangle}
           invertTrend
         />

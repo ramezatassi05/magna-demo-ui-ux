@@ -104,9 +104,9 @@ describe('AgentChatPanel', () => {
 
     render(<AgentChatPanel open onClose={vi.fn()} />);
 
-    // The ThinkingIndicator renders a "Thinking" label with a pulsing dot
-    // when the assistant has no text/tool calls yet.
-    expect(screen.getByText('Thinking')).toBeInTheDocument();
+    // The ThinkingIndicator renders a "Thinking…" label with a pulsing dot
+    // when the assistant has no text/tool calls yet (ellipsis signals ongoing state).
+    expect(screen.getByText('Thinking…')).toBeInTheDocument();
   });
 
   it('renders user and assistant message bubbles when messages exist', () => {

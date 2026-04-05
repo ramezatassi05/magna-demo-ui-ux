@@ -20,7 +20,9 @@ export function ThinkingIndicator({ messages, active }: ThinkingIndicatorProps) 
   const hasMessages = messages.length > 0;
 
   const label = active
-    ? 'Thinking'
+    ? hasMessages
+      ? `Thinking · step ${messages.length}`
+      : 'Thinking…'
     : hasMessages
       ? `Reasoning (${messages.length})`
       : 'Thought';

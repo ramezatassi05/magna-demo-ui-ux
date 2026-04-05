@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowDown, ArrowUp, ArrowUpDown, Inbox } from 'lucide-react';
+import { AlertCircle, ArrowDown, ArrowUp, ArrowUpDown, Inbox, RefreshCw } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import type { TestRecord } from '@/lib/types';
@@ -22,6 +22,10 @@ type SortableKey =
 interface TestResultsTableProps {
   rows: TestRecord[];
   loading?: boolean;
+  /** Fetch error from SWR; when set (and not loading), the table body shows an error row with retry. */
+  error?: Error | null;
+  /** Called when the user clicks retry in the error row. */
+  onRetry?: () => void;
   page: number;
   pageSize: number;
   total: number;
@@ -61,6 +65,8 @@ const COLUMN_COUNT = COLUMNS.length;
 export function TestResultsTable({
   rows,
   loading = false,
+  error = null,
+  onRetry,
   page,
   pageSize,
   total,
@@ -149,7 +155,37 @@ export function TestResultsTable({
               </>
             )}
 
-            {!loading && rows.length === 0 && (
+            {!loading && error && (
+              <tr>
+                <td colSpan={COLUMN_COUNT} className="h-[200px] text-center">
+                  <div
+                    className="flex flex-col items-center justify-center gap-3"
+                    role="alert"
+                  >
+                    <AlertCircle
+                      className="h-6 w-6 text-status-fail"
+                      aria-hidden
+                    />
+                    <div>
+                      <p className="text-sm font-medium text-ink-primary">
+                        Could not load test results
+                      </p>
+                      <p className="mt-0.5 text-[12px] text-ink-secondary">
+                        {error.message}
+                      </p>
+                    </div>
+                    {onRetry && (
+                      <Button variant="secondary" size="sm" onClick={onRetry}>
+                        <RefreshCw className="h-3 w-3" aria-hidden />
+                        Retry
+                      </Button>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            )}
+
+            {!loading && !error && rows.length === 0 && (
               <tr>
                 <td colSpan={COLUMN_COUNT} className="h-[200px] text-center">
                   <div className="flex flex-col items-center justify-center gap-3">
@@ -172,7 +208,7 @@ export function TestResultsTable({
               </tr>
             )}
 
-            {!loading &&
+            {!loading && !error &&
               rows.map((row) => {
                 const isExpanded = expandedRowId === row.test_id;
                 return (
@@ -206,7 +242,7 @@ export function TestResultsTable({
               </span>
             </>
           )}
-          <span className="ml-2 text-ink-muted">· Sort applies to current page</span>
+          <span className="ml-2 text-ink-secondary">· Sort applies to current page</span>
         </span>
 
         <div className="flex items-center gap-2">

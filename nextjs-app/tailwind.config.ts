@@ -1,18 +1,20 @@
 import type { Config } from 'tailwindcss';
+import tailwindcssAnimate from 'tailwindcss-animate';
 
 /**
  * ADAS Test Agent — Design Tokens
  *
- * Hex values mirror the CSS custom properties in app/globals.css
- * (see CLAUDE.md:117-150). Using hex here lets Tailwind compute opacity
- * modifiers (`bg-agent-thinking/20`) automatically. The globals.css
- * variables remain the canonical source for hand-written CSS and
- * future theme switching.
+ * Hex values mirror the CSS custom properties in app/globals.css.
+ * Using hex here lets Tailwind compute opacity modifiers
+ * (`bg-agent-thinking/20`, `bg-state-critical/10`) automatically.
+ * The globals.css variables remain the canonical source for
+ * hand-written CSS and future theme switching.
  */
 const config: Config = {
   content: [
     './app/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
+    './stories/**/*.{ts,tsx}',
   ],
   theme: {
     extend: {
@@ -54,13 +56,35 @@ const config: Config = {
           DEFAULT: '#E5E7EB',   // --border-default
           subtle: '#F3F4F6',    // --border-subtle
         },
+        // State Rules — daylight-readable industrial alerts
+        state: {
+          critical: '#B00020',
+          'critical-bg': '#FFF1F2',
+          'critical-border': '#DC2626',
+          anomaly: '#D97706',
+          'anomaly-bg': '#FFFBEB',
+          'anomaly-border': '#F59E0B',
+          override: '#1D4ED8',
+          'override-bg': '#EFF6FF',
+          'override-border': '#3B82F6',
+          nominal: '#047857',
+        },
+        // Confidence meter track
+        meter: {
+          track: '#E5E7EB',
+        },
       },
       fontFamily: {
         mono: ['var(--font-jetbrains-mono)', 'ui-monospace', 'monospace'],
         sans: ['var(--font-dm-sans)', 'system-ui', '-apple-system', 'sans-serif'],
       },
+      fontSize: {
+        // Engineering metadata strip — mono 10px uppercase-tracked
+        code: ['10px', { lineHeight: '1.4', letterSpacing: '0.08em' }],
+      },
       borderRadius: {
-        card: '12px',
+        // Global card radius: 8px (tightened from 12px for industrial feel)
+        card: '8px',
       },
       boxShadow: {
         card: '0 1px 3px rgba(0, 0, 0, 0.06)',
@@ -79,9 +103,20 @@ const config: Config = {
         chatpanel: '400px',
         kpibar: '80px',
       },
+      transitionDuration: {
+        instant: '80ms',
+        quick: '160ms',
+        standard: '240ms',
+        emphasis: '360ms',
+      },
+      transitionTimingFunction: {
+        standard: 'cubic-bezier(0.4, 0, 0.2, 1)',
+        emphasis: 'cubic-bezier(0.2, 0, 0, 1)',
+        decelerate: 'cubic-bezier(0, 0, 0.2, 1)',
+      },
     },
   },
-  plugins: [],
+  plugins: [tailwindcssAnimate],
 };
 
 export default config;

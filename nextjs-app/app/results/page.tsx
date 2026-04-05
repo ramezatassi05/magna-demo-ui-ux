@@ -1,7 +1,6 @@
 'use client';
 
 import { Suspense, useMemo, useState } from 'react';
-import { AlertCircle } from 'lucide-react';
 import { ScenarioFilter } from '@/components/scenario-filter';
 import { TestResultsTable } from '@/components/test-results-table';
 import { TestResultsRowDetail } from '@/components/test-results-row-detail';
@@ -88,26 +87,11 @@ function ResultsPageInner() {
         activeCount={activeCount}
       />
 
-      {error && (
-        <div className="flex items-start gap-3 rounded-card border border-status-fail/20 bg-status-fail/5 p-3">
-          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-status-fail" aria-hidden />
-          <div className="flex-1 text-xs">
-            <p className="font-medium text-ink-primary">Failed to load validation records</p>
-            <p className="mt-0.5 text-ink-secondary">{error.message}</p>
-          </div>
-          <button
-            type="button"
-            onClick={() => refetch()}
-            className="text-xs font-medium text-magna-red hover:underline"
-          >
-            Retry
-          </button>
-        </div>
-      )}
-
       <TestResultsTable
         rows={sortedRows}
         loading={isLoading}
+        error={error ?? null}
+        onRetry={refetch}
         page={filters.page ?? 1}
         pageSize={filters.page_size ?? 25}
         total={data?.total ?? 0}

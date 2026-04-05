@@ -20,7 +20,10 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'ADAS Test Agent · Magna R&D',
+  title: {
+    default: 'ADAS Test Agent · Magna R&D',
+    template: '%s · ADAS Test Agent',
+  },
   description:
     'Internal tool for querying ADAS sensor test results, generating test cases, and visualizing quality metrics.',
 };

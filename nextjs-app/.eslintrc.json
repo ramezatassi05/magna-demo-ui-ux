@@ -1,3 +1,22 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "overrides": [
+    {
+      "files": ["components/industrial/**/*.tsx", "components/industrial/**/*.ts"],
+      "excludedFiles": ["components/industrial/industrial-icon.tsx"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "lucide-react",
+                "message": "Use <IndustrialIcon /> from @/components/industrial/industrial-icon instead. Raw lucide imports drift the icon system — add missing aliases to the ICONS map in industrial-icon.tsx."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
 }

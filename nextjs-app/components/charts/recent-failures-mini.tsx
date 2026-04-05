@@ -49,7 +49,7 @@ export function RecentFailuresMini({ rows, loading = false }: RecentFailuresMini
             <span className="flex-1 truncate text-ink-secondary group-hover:text-ink-primary" title={row.scenario}>
               {row.scenario}
             </span>
-            <span className="font-mono text-ink-muted tabular-nums shrink-0">
+            <span className="font-mono text-ink-secondary tabular-nums shrink-0">
               {formatDateShort(row.timestamp)}
             </span>
           </Link>

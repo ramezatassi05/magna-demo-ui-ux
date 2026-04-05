@@ -13,6 +13,12 @@ st.set_page_config(
     layout="wide",
 )
 
+st.warning(
+    "⚡ **This is the Streamlit prototype.** "
+    "See the production Next.js version at http://localhost:3000 →",
+    icon="⚡",
+)
+
 st.title("ADAS Test Agent — Internal R&D Prototype")
 
 st.markdown(

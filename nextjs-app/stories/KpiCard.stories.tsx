@@ -115,6 +115,28 @@ export const Loading: Story = {
   },
 };
 
+export const Error: Story = {
+  args: {
+    label: 'Pass Rate',
+    value: 0,
+    unit: '%',
+    accentColor: 'pass',
+    error: new window.Error('Failed to fetch /api/stats (503)'),
+    icon: Target,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Shown when the underlying fetch fails. The value slot renders a ' +
+          'fail-red AlertCircle + em-dash placeholder, and a "Failed to load" ' +
+          'sub-label replaces the trend row. Hover the icon for the full error ' +
+          'message.',
+      },
+    },
+  },
+};
+
 export const AccentPass: Story = {
   args: { label: 'Passing Runs', value: 392, accentColor: 'pass', icon: Target },
 };
