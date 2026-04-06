@@ -20,7 +20,7 @@ from __future__ import annotations
 from collections import Counter
 from contextlib import closing
 from datetime import datetime, timedelta, timezone
-from typing import Any, Literal
+from typing import Any, Dict, List, Literal, Optional, Tuple
 
 from langchain_core.tools import tool
 
@@ -33,12 +33,12 @@ from test_case_templates import build_test_cases
 
 
 def _build_where(
-    result: str | None = None,
-    sensor_type: str | None = None,
-    feature: str | None = None,
-    scenario_contains: str | None = None,
-    days_back: int | None = None,
-) -> tuple[str, list[Any]]:
+    result: Optional[str] = None,
+    sensor_type: Optional[str] = None,
+    feature: Optional[str] = None,
+    scenario_contains: Optional[str] = None,
+    days_back: Optional[int] = None,
+) -> Tuple[str, List[Any]]:
     """Build a parameterized WHERE clause. Returns ('WHERE a=? AND b=?', [params])."""
     clauses: list[str] = []
     params: list[Any] = []
@@ -72,7 +72,7 @@ def _build_where(
     return where_sql, params
 
 
-def _top_scenario(rows: list[dict]) -> str | None:
+def _top_scenario(rows: List[Dict]) -> Optional[str]:
     """Return the most frequent scenario in a row set (or None if empty)."""
     if not rows:
         return None
@@ -88,11 +88,11 @@ def _top_scenario(rows: list[dict]) -> str | None:
 
 @tool
 def query_tests(
-    result: Literal["pass", "fail", "warning"] | None = None,
-    sensor_type: Literal["camera", "radar", "thermal", "lidar"] | None = None,
-    feature: Literal["AEB", "FCW", "LCA", "BSD", "ACC", "TSR"] | None = None,
-    scenario_contains: str | None = None,
-    days_back: int | None = None,
+    result: Optional[Literal["pass", "fail", "warning"]] = None,
+    sensor_type: Optional[Literal["camera", "radar", "thermal", "lidar"]] = None,
+    feature: Optional[Literal["AEB", "FCW", "LCA", "BSD", "ACC", "TSR"]] = None,
+    scenario_contains: Optional[str] = None,
+    days_back: Optional[int] = None,
     limit: int = 20,
 ) -> dict:
     """Query the ADAS test database with optional filters.
@@ -204,9 +204,9 @@ def generate_chart_data(
         "mean_detection_distance",
         "mean_fp_rate",
     ] = "count",
-    group_by: Literal["result", "sensor_type", "feature"] | None = None,
-    filters: dict | None = None,
-    title: str | None = None,
+    group_by: Optional[Literal["result", "sensor_type", "feature"]] = None,
+    filters: Optional[Dict] = None,
+    title: Optional[str] = None,
 ) -> dict:
     """Build a Recharts-compatible payload aggregating test data.
 
@@ -368,7 +368,7 @@ def _infer_feature(requirement: str) -> str:
 @tool
 def generate_test_cases(
     requirement: str,
-    feature: Literal["AEB", "FCW", "LCA", "BSD", "ACC", "TSR"] | None = None,
+    feature: Optional[Literal["AEB", "FCW", "LCA", "BSD", "ACC", "TSR"]] = None,
     count: int = 5,
 ) -> dict:
     """Generate structured ADAS test cases from a natural-language requirement.
@@ -417,9 +417,9 @@ def _build_narrative(
 
 @tool
 def summarize_results(
-    sensor_type: Literal["camera", "radar", "thermal", "lidar"] | None = None,
-    feature: Literal["AEB", "FCW", "LCA", "BSD", "ACC", "TSR"] | None = None,
-    days_back: int | None = None,
+    sensor_type: Optional[Literal["camera", "radar", "thermal", "lidar"]] = None,
+    feature: Optional[Literal["AEB", "FCW", "LCA", "BSD", "ACC", "TSR"]] = None,
+    days_back: Optional[int] = None,
 ) -> dict:
     """Compute aggregate statistics for a filtered test population.
 

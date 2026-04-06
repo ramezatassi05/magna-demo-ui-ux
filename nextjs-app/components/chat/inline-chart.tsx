@@ -30,9 +30,9 @@ const AXIS_STYLE = {
 };
 
 const TOOLTIP_STYLE = {
-  background: '#1A1D27',
+  background: '#111111',
   border: '1px solid rgba(255,255,255,0.08)',
-  borderRadius: 6,
+  borderRadius: 2,
   fontSize: 11,
   color: '#F3F4F6',
   boxShadow: '0 4px 12px rgba(0,0,0,0.32)',
@@ -47,7 +47,7 @@ const DEFAULT_PALETTE = ['#10B981', '#EF4444', '#F59E0B', '#3B82F6', '#8B5CF6'];
  */
 export function InlineChart({ data }: InlineChartProps) {
   return (
-    <div className="rounded-lg border border-white/5 bg-surface-elevated p-3 animate-fade-in">
+    <div className="rounded-sm border border-white/5 bg-surface-elevated p-3 animate-fade-in">
       <div className="mb-2 font-mono text-[10px] uppercase tracking-wider text-ink-muted">
         {data.title}
       </div>

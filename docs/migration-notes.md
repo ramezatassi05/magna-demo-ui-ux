@@ -226,12 +226,12 @@ A component uses `text-status-fail` or `bg-surface-dark`. The hex value is never
 
 ```diff
 - magna: { red: '#C4161C', 'red-hover': '#A01218' },
-+ magna: { red: '#D62828', 'red-hover': '#B0171F' },
++ magna: { red: '#DA291C', 'red-hover': '#B51F23' },
 ```
 
 One diff. Done. Every component updates on rebuild.
 
-Typography is tokenized too: `font-mono` (JetBrains Mono) for numerics (KPI values, table columns, timestamps), `font-sans` (DM Sans) for UI. Loaded once via `next/font` in the root layout with `display: 'swap'`.
+Typography is tokenized too: `font-mono` (JetBrains Mono) for numerics (KPI values, table columns, timestamps), `font-sans` (Inter → Helvetica Neue, matching Magna's corporate typeface) for UI. Loaded once via `next/font` in the root layout with `display: 'swap'`.
 
 ---
 

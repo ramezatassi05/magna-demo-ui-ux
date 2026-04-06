@@ -64,7 +64,7 @@ export function ToolCallCard({ toolCall }: ToolCallCardProps) {
   const metadata = deriveToolMetadata(toolCall);
 
   return (
-    <div className="overflow-hidden rounded-lg border border-white/5 bg-surface-elevated animate-fade-in">
+    <div className="overflow-hidden rounded-sm border border-white/5 bg-surface-elevated animate-fade-in">
       <button
         type="button"
         onClick={() => setExpanded((v) => !v)}

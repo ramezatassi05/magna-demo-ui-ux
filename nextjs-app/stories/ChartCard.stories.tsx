@@ -126,7 +126,7 @@ export const WithHeaderRight: Story = {
     <ChartCard
       {...args}
       headerRight={
-        <span className="inline-flex h-6 items-center rounded-md border border-hairline bg-surface-card px-2 font-mono text-[10px] uppercase tracking-wider text-ink-secondary">
+        <span className="inline-flex h-6 items-center rounded-sm border border-hairline bg-surface-card px-2 font-mono text-[10px] uppercase tracking-wider text-ink-secondary">
           14d
         </span>
       }

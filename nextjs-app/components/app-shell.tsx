@@ -2,6 +2,7 @@
 
 import { useCallback, useState, type ReactNode } from 'react';
 
+import { cn } from '@/lib/utils';
 import { AgentChatPanel } from './agent-chat-panel';
 import { SidebarNav } from './sidebar-nav';
 
@@ -34,7 +35,12 @@ export function AppShell({ children }: AppShellProps) {
     <div className="min-h-screen bg-surface-base">
       <SidebarNav chatOpen={chatOpen} onToggleChat={toggleChat} />
 
-      <main className="ml-sidebar min-h-screen">
+      <main
+        className={cn(
+          'ml-sidebar min-h-screen transition-[margin] duration-300 ease-out',
+          chatOpen ? 'mr-[400px]' : 'mr-0',
+        )}
+      >
         <div className="mx-auto max-w-content px-6 py-6">{children}</div>
       </main>
 

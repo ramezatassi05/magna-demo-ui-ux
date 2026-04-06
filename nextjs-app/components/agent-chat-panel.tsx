@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { X, Sparkles, AlertCircle } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
@@ -41,9 +41,11 @@ export function AgentChatPanel({ open, onClose }: AgentChatPanelProps) {
 
   // One session id for the panel's lifetime. Exposed in the header strip
   // so support/logs can cross-reference without backend coupling.
-  const [sessionId] = useState(
-    () => `ses_${Math.random().toString(36).slice(2, 10)}`,
-  );
+  const [sessionId, setSessionId] = useState('');
+
+  useEffect(() => {
+    setSessionId(`ses_${Math.random().toString(36).slice(2, 10)}`);
+  }, []);
 
   const toolCount = useMemo(
     () =>
@@ -73,7 +75,7 @@ export function AgentChatPanel({ open, onClose }: AgentChatPanelProps) {
       <header className="border-b border-white/5 px-5 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-md bg-agent-thinking/20">
+            <div className="flex h-7 w-7 items-center justify-center rounded-sm bg-agent-thinking/20">
               <Sparkles
                 className="h-4 w-4 text-agent-thinking"
                 strokeWidth={2.2}
@@ -95,7 +97,7 @@ export function AgentChatPanel({ open, onClose }: AgentChatPanelProps) {
             aria-label="Close chat panel"
             tabIndex={bodyTabIndex}
             className={cn(
-              'flex h-8 w-8 items-center justify-center rounded-md text-ink-muted transition-colors',
+              'flex h-8 w-8 items-center justify-center rounded-sm text-ink-muted transition-colors',
               'hover:bg-white/[0.04] hover:text-ink-on-dark',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-magna-red focus-visible:ring-offset-2 focus-visible:ring-offset-surface-dark',
             )}
@@ -126,7 +128,7 @@ export function AgentChatPanel({ open, onClose }: AgentChatPanelProps) {
       {/* Global fetch/transport error banner (per-message stream errors render
           inside the bubble via `errored`). */}
       {error && (
-        <div className="mx-5 mb-2 flex items-start gap-2 rounded-md border border-status-fail/30 bg-status-fail/10 px-3 py-2">
+        <div className="mx-5 mb-2 flex items-start gap-2 rounded-sm border border-status-fail/30 bg-status-fail/10 px-3 py-2">
           <AlertCircle
             className="mt-0.5 h-3.5 w-3.5 shrink-0 text-status-fail"
             strokeWidth={2}

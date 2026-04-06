@@ -21,15 +21,16 @@ const config: Config = {
       colors: {
         // Surfaces — backgrounds
         surface: {
-          dark: '#0F1117',      // --bg-primary: sidebar, dark chat panel
-          elevated: '#1A1D27',  // --bg-secondary: cards on dark surface
+          dark: '#000000',      // --bg-primary: sidebar, dark chat panel (pure black per magna.com)
+          elevated: '#111111',  // --bg-secondary: cards on dark surface
           base: '#F8F9FB',      // --bg-content: main content area
           card: '#FFFFFF',      // --bg-card: cards on light surface
         },
-        // Magna brand
+        // Magna brand — sourced from magna.com (Pantone 179 C)
         magna: {
-          red: '#C4161C',           // --magna-red
-          'red-hover': '#A01218',   // --magna-red-hover
+          red: '#DA291C',           // --magna-red
+          'red-hover': '#B51F23',   // --magna-red-hover
+          gray: '#ACACAC',          // --magna-gray
         },
         // Test result status
         status: {
@@ -76,15 +77,15 @@ const config: Config = {
       },
       fontFamily: {
         mono: ['var(--font-jetbrains-mono)', 'ui-monospace', 'monospace'],
-        sans: ['var(--font-dm-sans)', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['var(--font-inter)', "'Helvetica Neue'", "'Helvetica'", 'system-ui', '-apple-system', 'sans-serif'],
       },
       fontSize: {
         // Engineering metadata strip — mono 10px uppercase-tracked
         code: ['10px', { lineHeight: '1.4', letterSpacing: '0.08em' }],
       },
       borderRadius: {
-        // Global card radius: 8px (tightened from 12px for industrial feel)
-        card: '8px',
+        // Global card radius: 2px (sharp corners per magna.com design language)
+        card: '2px',
       },
       boxShadow: {
         card: '0 1px 3px rgba(0, 0, 0, 0.06)',
@@ -111,6 +112,7 @@ const config: Config = {
       },
       transitionTimingFunction: {
         standard: 'cubic-bezier(0.4, 0, 0.2, 1)',
+        magna: 'cubic-bezier(0.35, 0.495, 0.445, 1.005)',
         emphasis: 'cubic-bezier(0.2, 0, 0, 1)',
         decelerate: 'cubic-bezier(0, 0, 0.2, 1)',
       },

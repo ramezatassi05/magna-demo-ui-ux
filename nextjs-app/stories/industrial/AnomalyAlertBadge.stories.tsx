@@ -53,7 +53,7 @@ export const StandaloneVariants: Story = {
 
 export const InlineRowStrip: Story = {
   render: () => (
-    <div className="w-80 rounded-md border border-hairline bg-surface-card">
+    <div className="w-80 rounded-sm border border-hairline bg-surface-card">
       {[
         { severity: 'critical' as const, text: 'TC-00042 · Thermal AEB · 42m fail' },
         { severity: 'anomaly' as const, text: 'TC-00043 · Camera FCW · FPR 4.8%' },

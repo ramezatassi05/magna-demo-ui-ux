@@ -335,7 +335,7 @@ function ExportMenu({
           />
           <div
             role="menu"
-            className="absolute right-0 top-full z-20 mt-1 w-56 overflow-hidden rounded-md border border-hairline bg-surface-card shadow-card-hover"
+            className="absolute right-0 top-full z-20 mt-1 w-56 overflow-hidden rounded-sm border border-hairline bg-surface-card shadow-card-hover"
           >
             <ExportMenuItem
               icon={<FileSpreadsheet className="h-3.5 w-3.5" aria-hidden />}

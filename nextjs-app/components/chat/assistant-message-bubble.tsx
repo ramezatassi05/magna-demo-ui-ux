@@ -48,7 +48,7 @@ export function AssistantMessageBubble({
       )}
 
       {message.text && (
-        <div className="rounded-lg bg-surface-elevated px-3 py-2.5 text-[13px] leading-relaxed text-ink-on-dark">
+        <div className="rounded-sm bg-surface-elevated px-3 py-2.5 text-[13px] leading-relaxed text-ink-on-dark">
           <MarkdownText content={message.text} />
         </div>
       )}
@@ -58,7 +58,7 @@ export function AssistantMessageBubble({
       ))}
 
       {message.errored && (
-        <div className="rounded-lg border border-status-fail/30 bg-status-fail/10 px-3 py-2 text-[12px] text-status-fail">
+        <div className="rounded-sm border border-status-fail/30 bg-status-fail/10 px-3 py-2 text-[12px] text-status-fail">
           {message.errored.message}
         </div>
       )}

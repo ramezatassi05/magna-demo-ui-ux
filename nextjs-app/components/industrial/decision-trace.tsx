@@ -229,7 +229,7 @@ export function DecisionTrace({
   return (
     <div
       className={cn(
-        'rounded-lg border border-white/5 bg-surface-elevated/60',
+        'rounded-sm border border-white/5 bg-surface-elevated/60',
         className,
       )}
     >

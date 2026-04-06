@@ -25,12 +25,12 @@ Single source of truth: **CSS custom properties** in [`nextjs-app/app/globals.cs
 
 | Token | Hex | Tailwind utility | Purpose |
 |---|---|---|---|
-| `--bg-primary` | `#0F1117` | `surface-dark` | Sidebar, chat panel |
-| `--bg-secondary` | `#1A1D27` | `surface-elevated` | Cards on dark surface, active nav item |
+| `--bg-primary` | `#000000` | `surface-dark` | Sidebar, chat panel (pure black per magna.com) |
+| `--bg-secondary` | `#111111` | `surface-elevated` | Cards on dark surface, active nav item |
 | `--bg-content` | `#F8F9FB` | `surface-base` | Main content area |
 | `--bg-card` | `#FFFFFF` | `surface-card` | Cards on light surface |
-| `--magna-red` | `#C4161C` | `magna-red` | Brand accent, active markers, CTA hover targets |
-| `--magna-red-hover` | `#A01218` | `magna-red-hover` | Primary button hover state |
+| `--magna-red` | `#DA291C` | `magna-red` | Brand accent (Pantone 179 C, sourced from magna.com) |
+| `--magna-red-hover` | `#B51F23` | `magna-red-hover` | Primary button hover state |
 | `--status-pass` | `#10B981` | `status-pass` | Pass badges, positive trend arrows |
 | `--status-fail` | `#EF4444` | `status-fail` | Fail badges, error banners, destructive actions |
 | `--status-warning` | `#F59E0B` | `status-warning` | Warning badges, amber indicators |
@@ -50,8 +50,8 @@ Single source of truth: **CSS custom properties** in [`nextjs-app/app/globals.cs
 ### Typography scale
 
 - **Display / data / code** → `font-mono` → `JetBrains Mono`, fallback `ui-monospace`, `SF Mono`, `Menlo`
-- **Body / UI** → `font-sans` → `DM Sans`, fallback system sans
-- `body` has `font-feature-settings: 'cv11', 'ss01'` for DM Sans' alternate glyphs
+- **Body / UI** → `font-sans` → `Inter` → `Helvetica Neue` → system sans (matches Magna's corporate typeface)
+- `body` has `font-feature-settings: 'cv11'` for Inter's alternate glyphs
 
 | Size | Use |
 |---|---|

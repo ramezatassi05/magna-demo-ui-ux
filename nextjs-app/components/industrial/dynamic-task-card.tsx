@@ -82,10 +82,10 @@ export function DynamicTaskCard({ task, className }: DynamicTaskCardProps) {
   const badgeSeverity = task.severity === 'nominal' ? 'watch' : task.severity;
 
   return (
-    <SlideUp distance={8}>
+    <SlideUp distance={8} className="h-full">
       <article
         className={cn(
-          'relative overflow-hidden rounded-card border border-hairline bg-surface-card p-4 pl-5',
+          'relative overflow-hidden rounded-card border border-hairline bg-surface-card p-4 pl-5 h-full',
           className,
         )}
       >

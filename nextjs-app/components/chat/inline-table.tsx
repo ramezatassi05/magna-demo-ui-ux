@@ -19,7 +19,7 @@ const RESULT_COLORS: Record<TestResult, string> = {
  */
 export function InlineTable({ data }: InlineTableProps) {
   return (
-    <div className="overflow-hidden rounded-lg border border-white/5 bg-surface-elevated animate-fade-in">
+    <div className="overflow-hidden rounded-sm border border-white/5 bg-surface-elevated animate-fade-in">
       <div className="border-b border-white/5 px-3 py-2">
         <div className="font-mono text-[10px] uppercase tracking-wider text-ink-muted">
           {data.title}

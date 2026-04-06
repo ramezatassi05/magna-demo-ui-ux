@@ -73,7 +73,7 @@ export function ScenarioFilter({
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Search scenarios or notes…"
             className={cn(
-              'h-9 w-full rounded-md border border-hairline bg-surface-card pl-8 pr-3 text-xs',
+              'h-9 w-full rounded-sm border border-hairline bg-surface-card pl-8 pr-3 text-xs',
               'placeholder:text-ink-muted',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-magna-red focus-visible:ring-offset-1',
             )}
@@ -101,7 +101,7 @@ export function ScenarioFilter({
         />
 
         {/* Date range */}
-        <div className="inline-flex items-center gap-1 rounded-md border border-hairline bg-surface-card px-2 h-8">
+        <div className="inline-flex items-center gap-1 rounded-sm border border-hairline bg-surface-card px-2 h-8">
           <input
             type="date"
             value={filters.date_from ?? ''}

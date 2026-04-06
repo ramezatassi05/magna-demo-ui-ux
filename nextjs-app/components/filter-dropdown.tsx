@@ -36,7 +36,7 @@ export function FilterDropdown<V extends string>({
         value={value ?? ''}
         onChange={(e) => onChange((e.target.value || undefined) as V | undefined)}
         className={cn(
-          'h-9 appearance-none rounded-md border bg-surface-card pl-3 pr-8 text-xs font-medium',
+          'h-9 appearance-none rounded-sm border bg-surface-card pl-3 pr-8 text-xs font-medium',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-magna-red focus-visible:ring-offset-1',
           'transition-colors',
           active

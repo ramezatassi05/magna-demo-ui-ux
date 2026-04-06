@@ -55,7 +55,7 @@ export function ChatInput({
     >
       <div
         className={cn(
-          'flex items-end gap-2 rounded-lg bg-surface-elevated px-3 py-2',
+          'flex items-end gap-2 rounded-sm bg-surface-elevated px-3 py-2',
           'focus-within:ring-1 focus-within:ring-agent-thinking/40',
         )}
       >
@@ -87,7 +87,7 @@ export function ChatInput({
             aria-label="Stop generation"
             tabIndex={tabIndex}
             className={cn(
-              'flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-status-fail text-white transition-opacity',
+              'flex h-7 w-7 shrink-0 items-center justify-center rounded-sm bg-status-fail text-white transition-opacity',
               'hover:opacity-90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-status-fail focus-visible:ring-offset-2 focus-visible:ring-offset-surface-elevated',
             )}
           >
@@ -100,7 +100,7 @@ export function ChatInput({
             aria-label="Send message"
             tabIndex={tabIndex}
             className={cn(
-              'flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-magna-red text-white transition-colors',
+              'flex h-7 w-7 shrink-0 items-center justify-center rounded-sm bg-magna-red text-white transition-colors',
               'hover:bg-magna-red-hover disabled:cursor-not-allowed disabled:opacity-40',
               'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-magna-red focus-visible:ring-offset-2 focus-visible:ring-offset-surface-elevated',
             )}

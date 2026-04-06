@@ -21,7 +21,7 @@ const PRIORITY_STYLES: Record<TestCasePriority, string> = {
 /** One AI-generated test case, with collapsibles and approval buttons. */
 export function TestCaseCard({ testCase }: TestCaseCardProps) {
   return (
-    <div className="space-y-2 rounded-lg border border-white/5 bg-surface-elevated p-3 animate-fade-in">
+    <div className="space-y-2 rounded-sm border border-white/5 bg-surface-elevated p-3 animate-fade-in">
       <header className="flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
           <div className="font-mono text-[10px] text-agent-thinking">

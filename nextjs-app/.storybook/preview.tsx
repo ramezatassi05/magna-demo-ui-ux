@@ -17,8 +17,8 @@ const preview: Preview = {
       values: [
         { name: 'content', value: '#F8F9FB' },
         { name: 'card', value: '#FFFFFF' },
-        { name: 'dark', value: '#0F1117' },
-        { name: 'elevated', value: '#1A1D27' },
+        { name: 'dark', value: '#000000' },
+        { name: 'elevated', value: '#111111' },
       ],
     },
     docs: {
@@ -46,12 +46,12 @@ const preview: Preview = {
           // fall back to the next-best system fonts so content is still
           // legible without pulling next/font into the preview bundle.
           fontFamily:
-            "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'DM Sans', Roboto, 'Helvetica Neue', Arial, sans-serif",
+            "'Helvetica Neue', 'Helvetica', -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, Arial, sans-serif",
         }}
       >
         <style>{`
           :root {
-            --font-dm-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'DM Sans', Roboto, sans-serif;
+            --font-inter: 'Helvetica Neue', 'Helvetica', -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif;
             --font-jetbrains-mono: ui-monospace, SFMono-Regular, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
           }
         `}</style>

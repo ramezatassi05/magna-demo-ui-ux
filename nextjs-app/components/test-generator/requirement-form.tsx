@@ -100,7 +100,7 @@ export function RequirementForm({
           rows={5}
           placeholder="e.g., The AEB system shall detect pedestrians at ≥50m in daylight conditions with ≤0.1% false positive rate"
           className={cn(
-            'mt-1.5 block w-full resize-y rounded-md border border-hairline bg-surface-card px-3 py-2.5 text-sm text-ink-primary',
+            'mt-1.5 block w-full resize-y rounded-sm border border-hairline bg-surface-card px-3 py-2.5 text-sm text-ink-primary',
             'placeholder:text-ink-muted',
             'focus:border-magna-red focus:outline-none focus:ring-1 focus:ring-magna-red',
             'disabled:cursor-not-allowed disabled:opacity-60',
@@ -131,7 +131,7 @@ export function RequirementForm({
             }
             disabled={disabled}
             className={cn(
-              'mt-1.5 block w-full rounded-md border border-hairline bg-surface-card px-3 py-2 text-sm text-ink-primary',
+              'mt-1.5 block w-full rounded-sm border border-hairline bg-surface-card px-3 py-2 text-sm text-ink-primary',
               'focus:border-magna-red focus:outline-none focus:ring-1 focus:ring-magna-red',
               'disabled:cursor-not-allowed disabled:opacity-60',
             )}
@@ -200,7 +200,7 @@ export function RequirementForm({
               onClick={() => applyExample(ex)}
               disabled={disabled}
               className={cn(
-                'group flex items-start gap-2 rounded-md border border-hairline bg-surface-base px-2.5 py-2 text-left text-[12px] text-ink-secondary',
+                'group flex items-start gap-2 rounded-sm border border-hairline bg-surface-base px-2.5 py-2 text-left text-[12px] text-ink-secondary',
                 'transition-colors hover:border-magna-red/30 hover:bg-magna-red/5 hover:text-ink-primary',
                 'focus-visible:outline-none focus-visible:border-magna-red focus-visible:ring-1 focus-visible:ring-magna-red',
                 'disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-surface-base disabled:hover:border-hairline disabled:hover:text-ink-secondary',

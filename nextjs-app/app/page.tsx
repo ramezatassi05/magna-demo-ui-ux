@@ -137,7 +137,7 @@ export default function DashboardPage() {
             onClick={() => setSimOpen((v) => !v)}
             aria-expanded={simOpen}
             aria-controls="parameter-slider-panel"
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-hairline bg-surface-card px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-wide text-ink-secondary transition-colors hover:border-magna-red/30 hover:text-ink-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-magna-red"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-sm border border-hairline bg-surface-card px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-wide text-ink-secondary transition-colors hover:border-magna-red/30 hover:text-ink-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-magna-red"
           >
             <IndustrialIcon name="Threshold" size="sm" tone="inherit" />
             Simulate thresholds
@@ -154,7 +154,7 @@ export default function DashboardPage() {
               className="flex gap-3 overflow-x-auto pb-2"
             >
               {tasks.map((t) => (
-                <div key={t.id} className="w-[320px] shrink-0">
+                <div key={t.id} className="w-[320px] shrink-0 h-full">
                   <DynamicTaskCard task={t} />
                 </div>
               ))}

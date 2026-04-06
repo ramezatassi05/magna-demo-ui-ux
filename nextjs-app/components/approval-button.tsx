@@ -62,7 +62,7 @@ export function ApprovalButton({
       <div className="flex items-center justify-between pt-1">
         <span
           className={cn(
-            'inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[11px] font-medium',
+            'inline-flex items-center gap-1.5 rounded-sm px-2 py-1 text-[11px] font-medium',
             approved
               ? 'bg-status-pass/15 text-status-pass'
               : 'bg-status-fail/15 text-status-fail',
@@ -95,7 +95,7 @@ export function ApprovalButton({
           onApprove?.(testId);
         }}
         className={cn(
-          'flex-1 inline-flex items-center justify-center gap-1.5 rounded-md border border-status-pass/40 px-2 py-1.5 text-[11px] font-medium text-status-pass transition-colors',
+          'flex-1 inline-flex items-center justify-center gap-1.5 rounded-sm border border-status-pass/40 px-2 py-1.5 text-[11px] font-medium text-status-pass transition-colors',
           'hover:bg-status-pass hover:text-white',
           'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-status-pass',
         )}
@@ -110,7 +110,7 @@ export function ApprovalButton({
           onReject?.(testId);
         }}
         className={cn(
-          'flex-1 inline-flex items-center justify-center gap-1.5 rounded-md border border-status-fail/40 px-2 py-1.5 text-[11px] font-medium text-status-fail transition-colors',
+          'flex-1 inline-flex items-center justify-center gap-1.5 rounded-sm border border-status-fail/40 px-2 py-1.5 text-[11px] font-medium text-status-fail transition-colors',
           'hover:bg-status-fail hover:text-white',
           'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-status-fail',
         )}

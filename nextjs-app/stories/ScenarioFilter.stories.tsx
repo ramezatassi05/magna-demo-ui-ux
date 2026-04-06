@@ -64,7 +64,7 @@ function InteractiveFilter({ initial }: { initial: TestFilters }) {
         onClear={() => setFilters({ page: 1, page_size: 20 })}
         activeCount={active}
       />
-      <pre className="rounded-md bg-surface-dark p-3 font-mono text-[11px] text-ink-on-dark">
+      <pre className="rounded-sm bg-surface-dark p-3 font-mono text-[11px] text-ink-on-dark">
         {JSON.stringify(filters, null, 2)}
       </pre>
     </div>

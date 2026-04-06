@@ -28,7 +28,7 @@ export function ThinkingIndicator({ messages, active }: ThinkingIndicatorProps) 
       : 'Thought';
 
   return (
-    <div className="rounded-md border border-white/10 bg-surface-elevated/80">
+    <div className="rounded-sm border border-white/10 bg-surface-elevated/80">
       <button
         type="button"
         onClick={() => setExpanded((v) => !v)}

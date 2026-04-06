@@ -175,7 +175,7 @@ export function TestCaseCardLight({
             <button
               type="button"
               onClick={handleEnterEdit}
-              className="inline-flex items-center gap-1 rounded-md border border-hairline bg-surface-card px-2 py-1 font-mono text-[10px] uppercase tracking-wide text-ink-secondary transition-colors hover:border-magna-red/30 hover:text-ink-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-magna-red"
+              className="inline-flex items-center gap-1 rounded-sm border border-hairline bg-surface-card px-2 py-1 font-mono text-[10px] uppercase tracking-wide text-ink-secondary transition-colors hover:border-magna-red/30 hover:text-ink-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-magna-red"
             >
               <Pencil className="h-3 w-3" strokeWidth={2} aria-hidden />
               Edit
@@ -273,7 +273,7 @@ export function TestCaseCardLight({
             <button
               type="button"
               onClick={handleSave}
-              className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-md bg-ink-primary px-3 py-1.5 text-[11px] font-medium text-white transition-colors hover:bg-black focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-magna-red"
+              className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-sm bg-ink-primary px-3 py-1.5 text-[11px] font-medium text-white transition-colors hover:bg-black focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-magna-red"
             >
               <Check className="h-3 w-3" strokeWidth={2.5} aria-hidden />
               Save
@@ -281,7 +281,7 @@ export function TestCaseCardLight({
             <button
               type="button"
               onClick={handleCancel}
-              className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-md border border-hairline px-3 py-1.5 text-[11px] font-medium text-ink-secondary transition-colors hover:border-hairline hover:bg-surface-base hover:text-ink-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-magna-red"
+              className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-sm border border-hairline px-3 py-1.5 text-[11px] font-medium text-ink-secondary transition-colors hover:border-hairline hover:bg-surface-base hover:text-ink-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-magna-red"
             >
               <X className="h-3 w-3" strokeWidth={2.5} aria-hidden />
               Cancel

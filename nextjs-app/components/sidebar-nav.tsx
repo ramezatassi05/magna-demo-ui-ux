@@ -62,7 +62,7 @@ export function SidebarNav({ chatOpen, onToggleChat }: SidebarNavProps) {
                   href={item.href}
                   aria-current={isActive ? 'page' : undefined}
                   className={cn(
-                    'group flex h-11 items-center gap-3 rounded-md pr-3 text-sm transition-colors',
+                    'group flex h-11 items-center gap-3 rounded-sm pr-3 text-sm transition-colors',
                     isActive
                       ? 'border-l-[3px] border-magna-red bg-white/[0.02] pl-[13px] text-ink-on-dark'
                       : 'pl-4 text-ink-muted hover:bg-white/[0.04] hover:text-ink-on-dark',
@@ -90,7 +90,7 @@ export function SidebarNav({ chatOpen, onToggleChat }: SidebarNavProps) {
           aria-pressed={chatOpen}
           aria-label={chatOpen ? 'Close AI Agent panel' : 'Open AI Agent panel'}
           className={cn(
-            'flex h-11 w-full items-center gap-3 rounded-md pl-4 pr-3 text-sm font-medium transition-colors',
+            'flex h-11 w-full items-center gap-3 rounded-sm pl-4 pr-3 text-sm font-medium transition-colors',
             chatOpen
               ? 'bg-surface-elevated text-ink-on-dark'
               : 'text-ink-muted hover:bg-white/[0.04] hover:text-ink-on-dark',
